@@ -1,0 +1,103 @@
+# yamllint disable rule:indentation rule:line-length
+# Fedora-33
+---
+values:
+  added_in_defaults: defaults_value
+  added_in_lookup: lookup_value
+  added_in_pillar: pillar_value
+  lookup:
+    arch: amd64
+    rootgroup: root
+    gpg:
+      key: B9B7A108373276BF3C0406F9FC8A7D14C3CD543A
+      server: pgp.rediris.es
+    group: vaultwarden
+    paths:
+      attachments: /opt/vaultwarden/data/attachments
+      bin: /opt/vaultwarden
+      build: /opt/vaultwarden/src
+      conf: /etc/opt/vaultwarden
+      data: /opt/vaultwarden/data
+      home: /users/vaultwarden
+      icon_cache: /opt/vaultwarden/data/icon_cache
+      log: /opt/vaultwarden/log
+      rsa_keyfile: /opt/vaultwarden/data/rsa_key
+      sends: /opt/vaultwarden/data/sends
+      web_vault: /opt/vaultwarden/web-vault
+    pkg:
+      latest: https://github.com/dani-garcia/vaultwarden/releases/latest/
+      source: https://github.com/dani-garcia/vaultwarden.git
+    requirements:
+      base:
+        - build-essential
+        - git
+        - pkg-config
+        - libssl-dev
+      gpg:
+        - gpg
+        - python3-gnupg
+      mysql:
+        - libmariadb-dev-compat
+        - libmariadb-dev
+      postgresql:
+        - libpq-dev
+        - pkg-config
+      sqlite:
+        - libsqlite3-dev
+    rustup_init:
+      source: https://sh.rustup.rs
+      source_hash: a3cb081f88a6789d104518b30d4aa410009cd08c3822a1226991d6cf0442a0f8
+    service:
+      name: vaultwarden
+      unit: /etc/systemd/system/{name}.service
+    user: vaultwarden
+    web_vault:
+      latest: https://github.com/dani-garcia/bw_web_builds/releases/latest/
+      sig: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz.asc
+      source: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz
+  config:
+    admin_token: ''
+    database_url: data/db.sqlite3
+    disable_icon_download: false
+    domain: http://vault.example.com
+    signups_allowed: true
+    signups_domains_whitelist:
+      - example.com
+      - example.net
+      - example.org
+    signups_verify: false
+    templates_folder: /path/to/templates
+    web_vault_enabled: true
+  features:
+    - mysql
+    - postgresql
+    - sqlite
+  rust_setup: true
+  service:
+    requires_mount: []
+    wants: []
+  version: latest
+  version_web_vault: latest
+  map_jinja:
+    sources:
+    - Y:G@osarch
+    - Y:G@os_family
+    - Y:G@os
+    - Y:G@osfinger
+    - C@warden
+    - Y:G@id
+  master: template-master
+  tofs:
+    files_switch:
+    - any/path/can/be/used/here
+    - id
+    - roles
+    - osfinger
+    - os
+    - os_family
+    source_files:
+      warden-config-file-file-managed:
+      - example.tmpl.jinja
+      warden-web_vault-config-file-file-managed:
+      - web_vault-example.tmpl.jinja
+  winner: pillar

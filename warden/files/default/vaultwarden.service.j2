@@ -1,0 +1,45 @@
+[Unit]
+Description=Vaultwarden: Bitwarden compatible server
+Documentation=https://github.com/dani-garcia/vaultwarden
+After=network.target auditd.service
+{%- if warden.service.wants %}
+{%-   for wanted in warden.service.wants %}
+Wants={{ wanted }}.service
+After={{ wanted }}.service
+{%-   endfor %}
+{%- endif %}
+{%- if warden.service.requires_mount %}
+{%-   for mount in warden.service.requires_mount %}
+RequiresMountFor={{ mount }}
+{%-   endfor %}
+{%- endif %}
+
+[Service]
+ExecStart={{ warden.lookup.paths.bin | path_join('vaultwarden') }}
+Type=simple
+Restart=always
+RestartSec=2s
+User={{ warden.lookup.user }}
+Group={{ warden.lookup.group }}
+WorkingDirectory={{ warden.lookup.paths.bin }}
+
+# Pass through configuration as env vars
+EnvironmentFile={{ warden.lookup.paths.conf | path_join('vaultwarden.conf') }}
+
+# Sandbox vaultwarden
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+NoNewPrivileges=true
+ProtectSystem=strict
+
+# Allow writes only on data and log paths
+# + possible custom paths for sends etc.
+ReadWritePaths={{ warden.lookup.paths.data }} {{ warden.lookup.paths.log }}{% if warden._rw %} {{ warden._rw | join(' ') }}{% endif %}
+
+# Set reasonable connection and process limits
+LimitNOFILE=1048576
+LimitNPROC=64
+
+[Install]
+WantedBy=multi-user.target

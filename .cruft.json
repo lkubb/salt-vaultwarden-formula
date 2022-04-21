@@ -1,0 +1,122 @@
+{
+  "template": "https://github.com/lkubb/salt-template-formula",
+  "commit": "50a694adefdf54f1ca465db433c033ca764942bc",
+  "checkout": null,
+  "context": {
+    "cookiecutter": {
+      "_extensions": [
+        "local_extensions.YAMLDumper"
+      ],
+      "_jinja2_env_vars": {
+        "block_start_string": "{!",
+        "block_end_string": "!}",
+        "variable_start_string": "{=",
+        "variable_end_string": "=}",
+        "comment_start_string": "{@",
+        "comment_end_string": "@}"
+      },
+      "name": "Vaultwarden",
+      "abbr": "vaultwarden",
+      "abbr_pysafe": "warden",
+      "pkg": "",
+      "needs_repo": "",
+      "config": "/etc/opt/vaultwarden/vaultwarden.conf",
+      "service": "vaultwarden",
+      "subcomponent": "web_vault",
+      "subcomponent_config": "",
+      "git_username": "lkubb",
+      "_lookup": {
+        "gpg": {
+          "key": "B9B7A108373276BF3C0406F9FC8A7D14C3CD543A",
+          "server": "pgp.rediris.es"
+        },
+        "requirements": {
+          "base": [
+            "build-essential",
+            "git",
+            "pkg-config",
+            "libssl-dev"
+          ],
+          "gpg": [
+            "gpg",
+            "python3-gnupg"
+          ],
+          "mysql": [
+            "libmariadb-dev-compat",
+            "libmariadb-dev"
+          ],
+          "sqlite": [
+            "libsqlite3-dev"
+          ],
+          "postgresql": [
+            "libpq-dev",
+            "pkg-config"
+          ]
+        },
+        "paths": {
+          "attachments": "/opt/vaultwarden/data/attachments",
+          "bin": "/opt/vaultwarden",
+          "build": "/opt/vaultwarden/src",
+          "conf": "/etc/opt/vaultwarden",
+          "data": "/opt/vaultwarden/data",
+          "home": "/users/vaultwarden",
+          "icon_cache": "/opt/vaultwarden/data/icon_cache",
+          "log": "/opt/vaultwarden/log",
+          "rsa_keyfile": "/opt/vaultwarden/data/rsa_key",
+          "sends": "/opt/vaultwarden/data/sends",
+          "web_vault": "/opt/vaultwarden/web-vault"
+        },
+        "service": {
+          "name": "vaultwarden",
+          "unit": "/etc/systemd/system/{name}.service"
+        },
+        "pkg": {
+          "latest": "https://github.com/dani-garcia/vaultwarden/releases/latest/",
+          "source": "https://github.com/dani-garcia/vaultwarden.git"
+        },
+        "rustup_init": {
+          "source": "https://sh.rustup.rs",
+          "source_hash": "a3cb081f88a6789d104518b30d4aa410009cd08c3822a1226991d6cf0442a0f8"
+        },
+        "user": "vaultwarden",
+        "group": "vaultwarden",
+        "web_vault": {
+          "latest": "https://github.com/dani-garcia/bw_web_builds/releases/latest/",
+          "source": "https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz",
+          "sig": "https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz.asc"
+        }
+      },
+      "_settings": {
+        "version": "latest",
+        "version_web_vault": "latest",
+        "rust_setup": true,
+        "features": [
+          "mysql",
+          "postgresql",
+          "sqlite"
+        ],
+        "service": {
+          "requires_mount": [],
+          "wants": []
+        },
+        "config": {
+          "database_url": "data/db.sqlite3",
+          "domain": "http://vault.example.com",
+          "signups_allowed": true,
+          "signups_verify": false,
+          "signups_domains_whitelist": [
+            "example.com",
+            "example.net",
+            "example.org"
+          ],
+          "admin_token": "",
+          "templates_folder": "/path/to/templates",
+          "web_vault_enabled": true,
+          "disable_icon_download": false
+        }
+      },
+      "_template": "https://github.com/lkubb/salt-template-formula"
+    }
+  },
+  "directory": null
+}

@@ -1,0 +1,27 @@
+{%- macro render_opt(name, val) %}
+{%-   if val is boolean %}
+{%-     set rendered = val | string | lower %}
+{%-   elif val | is_list %}
+{%-     set rendered = val | join(',') %}
+{#-   some special characters might make problems, escape the value just in case #}
+{%-   elif val is string %}
+{%-     set rendered = '"{}"'.format(val) %}
+{%-   else %}
+{%-     set rendered = val | string %}
+{%-   endif %}
+{{- name | upper }}={{ rendered }}
+{%- endmacro -%}
+
+## Vaultwarden config file managed by Salt.
+## Manual changes might be reset.
+
+## These are used as environment variables for the
+## vaultwarden service.
+## If you have enabled the admin interface, those settings
+## will be written to the data folder and will override
+## the ones specified here.
+
+{%- for name, val in warden.config.items() %}
+
+{{ render_opt(name, val) }}
+{%- endfor %}

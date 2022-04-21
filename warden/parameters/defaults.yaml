@@ -1,0 +1,70 @@
+# -*- coding: utf-8 -*-
+# vim: ft=yaml
+#
+# Set default values.
+---
+values:
+  lookup:
+    rootgroup: root
+    gpg:
+      key: B9B7A108373276BF3C0406F9FC8A7D14C3CD543A
+      server: pgp.rediris.es
+    group: vaultwarden
+    paths:
+      attachments: /opt/vaultwarden/data/attachments
+      bin: /opt/vaultwarden
+      build: /opt/vaultwarden/src
+      conf: /etc/opt/vaultwarden
+      data: /opt/vaultwarden/data
+      home: /home/vaultwarden
+      icon_cache: /opt/vaultwarden/data/icon_cache
+      log: /opt/vaultwarden/log
+      rsa_keyfile: /opt/vaultwarden/data/rsa_key
+      sends: /opt/vaultwarden/data/sends
+      web_vault: /opt/vaultwarden/web-vault
+    pkg:
+      latest: https://github.com/dani-garcia/vaultwarden/releases/latest/
+      source: https://github.com/dani-garcia/vaultwarden.git
+    requirements:
+      base:
+        - build-essential
+        - git
+        - pkg-config
+        - libssl-dev
+      gpg:
+        - gpg
+        - python3-gnupg
+      mysql:
+        - libmariadb-dev-compat
+        - libmariadb-dev
+      postgresql:
+        - libpq-dev
+        - pkg-config
+      sqlite:
+        - libsqlite3-dev
+    rustup_init:
+      source: https://sh.rustup.rs
+      source_hash: a3cb081f88a6789d104518b30d4aa410009cd08c3822a1226991d6cf0442a0f8
+    service:
+      name: vaultwarden
+      unit: /etc/systemd/system/{name}.service
+    user: vaultwarden
+    web_vault:
+      latest: https://github.com/dani-garcia/bw_web_builds/releases/latest/
+      sig: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz.asc  # yamllint disable-line rule:line-length
+      source: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz  # yamllint disable-line rule:line-length
+  config: []
+  features:
+    - mysql
+    - postgresql
+    - sqlite
+  rust_setup: true
+  service:
+    requires_mount: []
+    wants: []
+  version: latest
+  version_web_vault: latest
+  # Just here for testing
+  added_in_defaults: defaults_value
+  winner: defaults
+...

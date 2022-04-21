@@ -1,0 +1,76 @@
+{#- -*- coding: utf-8 -*- #}
+{#- vim: ft=jinja #}
+
+{#-
+    This queries Github releases (by default) to find the latest release
+    for vaulwarden and the patched web vault.
+    For vaultwarden, it would have been possible to pull the repo and run
+    `git tag --sort=v:refname | tail -n1`, but that would complicate
+    the package.installed state.
+    Not using "...".format() because the url_effective would interfere.
+-#}
+
+{%- for component in [
+      ('version', mapdata.lookup.pkg.latest),
+      ('version_web_vault', mapdata.lookup.web_vault.latest),
+    ]
+-%}
+  {%- set version, query = component -%}
+  {%- if 'latest' == mapdata[version] -%}
+    {#- make sure curl is available to parse the final URL -#}
+    {%- if 'curl' | which -%}
+      {%- set latest = salt['cmd.run_stdout'](
+            "curl -ILs -o /dev/null -w %{url_effective} '" ~ query ~
+            "' | grep -o '[^/]*$' | sed 's/v//'",
+            python_shell=true
+          )
+      -%}
+    {#- Otherwise, do some shell stuff to hopefully find (only) the version.
+        OPTIONS query failed with 404 and there is no way to get the final URL from Salt afaict. -#}
+    {%- else -%}
+      {%- set whole_page = salt['http.query'](query) -%}
+      {%- set latest = salt['cmd.run_stdout'](
+            "grep -oE '<h1 [^>]+>v?[0-9\.]+' | cut -d'>' -f2 | sed 's/v//'",
+            stdin=whole_page.body,
+            python_shell=true
+          )
+      -%}
+    {%- endif -%}
+    {%- do mapdata.update({version: latest}) -%}
+  {%- endif -%}
+{%- endfor -%}
+
+
+{#-
+    Parse required dependencies for compiling vaultwarden here
+    instead of the state file to keep it legible.
+-#}
+
+{%- set deps = [] -%}
+{%- for feat in mapdata.features -%}
+  {%- do deps.extend(mapdata.lookup.requirements.get(feat, [])) -%}
+{%- endfor -%}
+{%- do deps.extend(mapdata.lookup.requirements.base) -%}
+{%- do mapdata.update({'_deps': deps | unique}) -%}
+
+
+{#-
+    Set the correct path config values automatically.
+    Also, make sure the service has ReadWrite access.
+-#}
+
+{%- do mapdata.update({'_rw': {}}) -%}
+{%- for path in [
+      ('data_folder', mapdata.lookup.paths.data, mapdata.lookup.paths.bin | path_join('data')),
+      ('web_vault_folder', mapdata.lookup.paths.web_vault, mapdata.lookup.paths.bin | path_join('web-vault')),
+      ('attachments_folder', mapdata.lookup.paths.attachments, mapdata.lookup.paths.data | path_join('attachments')),
+      ('icon_cache_folder', mapdata.lookup.paths.icon_cache, mapdata.lookup.paths.data | path_join('icon_cache')),
+      ('sends_folder', mapdata.lookup.paths.sends, mapdata.lookup.paths.data | path_join('sends')),
+      ('rsa_key_filename', mapdata.lookup.paths.rsa_keyfile, mapdata.lookup.paths.data | path_join('rsa_key')),
+    ] -%}
+  {%- set var, current, default = path -%}
+  {%- if current != default -%}
+    {%- do mapdata.config.update({var: current}) -%}
+    {%- do mapdata._rw.append(current) -%}
+  {%- endif -%}
+{%- endfor -%}
