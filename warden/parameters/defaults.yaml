@@ -53,7 +53,7 @@ values:
       latest: https://github.com/dani-garcia/bw_web_builds/releases/latest/
       sig: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz.asc  # yamllint disable-line rule:line-length
       source: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz  # yamllint disable-line rule:line-length
-  config: []
+  config: {}
   features:
     - mysql
     - postgresql
