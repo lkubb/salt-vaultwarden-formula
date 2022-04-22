@@ -74,3 +74,5 @@
     {%- do mapdata._rw.append(current) -%}
   {%- endif -%}
 {%- endfor -%}
+
+{%- do mapdata.config.update({'log_file': mapdata.lookup.paths.log | path_join('vaultwarden.log')}) -%}

@@ -35,7 +35,8 @@ ProtectSystem=strict
 
 # Allow writes only on data and log paths
 # + possible custom paths for sends etc.
-ReadWritePaths={{ warden.lookup.paths.data }} {{ warden.lookup.paths.log }}{% if warden._rw %} {{ warden._rw | join(' ') }}{% endif %}
+ReadWritePaths={{ warden.lookup.paths.data }} {{ warden.lookup.paths.log }} {% if warden._rw -%}
+{{ warden._rw | join(' ') }}{% endif %}
 
 # Set reasonable connection and process limits
 LimitNOFILE=1048576

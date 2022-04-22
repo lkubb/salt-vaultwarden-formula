@@ -60,6 +60,13 @@ warden:
     # These are mostly internal parameters that you should not have to
     # modify too often.
     # If you change the paths, the bitwarden config will be adapted automatically.
+    # For future releases (>1.24) at least, mind the following:
+    #   The file uploads are now also handled by rocket directly, and uploaded
+    #   to a configurable temp directory first, before being moved to the attachments or
+    #   sends folder. We should document that the temp directory and the attachments and
+    #   sends folder must be in the same partition/mount point, otherwise the file move
+    #   will fail. (https://github.com/dani-garcia/vaultwarden/pull/2276)
+    # The env var for that is "TMP_FOLDER". @TODO
   lookup:
     gpg:
       key: B9B7A108373276BF3C0406F9FC8A7D14C3CD543A
