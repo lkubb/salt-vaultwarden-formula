@@ -14,9 +14,11 @@ Vaultwarden Formula
    :scale: 100%
    :target: https://github.com/pre-commit/pre-commit
 
-Manage Vaultwarden inofficial Bitwarden server with Salt.
+Manage Vaultwarden inofficial Bitwarden server with Salt. This will compile the binary from source and manage the service and configuration.
 
-This is currently written for Debian-based systems only, although extending the formula should be easy.
+Installing and configuring a `reverse proxy <https://github.com/dani-garcia/vaultwarden/wiki/Proxy-examples>`_, `fail2ban <https://github.com/dani-garcia/vaultwarden/wiki/Fail2Ban-Setup>`_ and possibly `log shipping <https://selivan.github.io/2017/02/07/rsyslog-log-forward-save-filename-handle-multi-line-failover.html>`_ (if you run those on another system) are *currently* out of scope. For hints, see `the official docs <https://github.com/dani-garcia/vaultwarden/wiki>`_.
+
+This was written for Debian-based systems primarily, although adapting the formula should be easy.
 
 Mind that the tests are currently just for show and have not been implemented.
 
