@@ -30,14 +30,23 @@ Rustup is installed for user '{{ warden.lookup.user }}':
     - onchanges:
       - Rustup-init is available
 
-Rust toolchain is installed for user '{{ warden.lookup.user }}':
+# Rust nightly is currently a dependency:
+#   https://github.com/dani-garcia/vaultwarden/wiki/Building-binary
+# because of the Rocket library:
+#   https://github.com/dani-garcia/vaultwarden/issues/712
+# This will be resolved in the near future and is already in main:
+#   https://github.com/dani-garcia/vaultwarden/pull/2276
+
+# We do not need to explicitly install a specific toolchain,
+# rustup will do that automatically. We set default nightly
+# to avoid pulling stable first. This will install nightly automatically.
+# Once there is a release that builds with stable, change that @FIXME.
+
+Rust toolchain defaults to nightly for user '{{ warden.lookup.user }}':
   cmd.run:
-    # apparently, Rust nightly is a dependency:
-    # https://github.com/dani-garcia/vaultwarden/wiki/Building-binary
-    # I don't think that's the best idea here, should be fine
-    # with stable.
-    - name: rustup toolchain install stable
+    - name: rustup default nightly
     - runas: {{ warden.lookup.user }}
+    # no unless since on the first installation, this will pull stable
     - require:
       - Rustup is installed for user '{{ warden.lookup.user }}'
 
