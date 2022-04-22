@@ -16,7 +16,7 @@ warden-config-file-file-managed:
                               lookup='warden-config-file-file-managed'
                  )
               }}
-    - mode: 644
+    - mode: '0600'
     - user: root
     - group: {{ warden.lookup.rootgroup }}
     - makedirs: True
