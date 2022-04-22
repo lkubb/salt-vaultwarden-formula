@@ -7,7 +7,7 @@
 
 Rust toolchain is removed for user '{{ warden.lookup.user }}':
   cmd.run:
-    - name: rustup toolchain uninstall nightly
+    - name: rustup toolchain uninstall stable
     - runas: {{ warden.lookup.user }}
 
 Rustup is removed for user '{{ warden.lookup.user }}':

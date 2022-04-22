@@ -19,6 +19,9 @@ Vaultwarden is absent:
       - {{ warden.lookup.paths.build }}
     - require:
       - sls: {{ sls_config_clean }}
+{%- if warden.rust_setup %}
+      - sls: {{ tplroot }}.rust.clean
+{%- endif %}
 
 Vaultwarden user/group are absent:
   user.absent:
