@@ -14,4 +14,21 @@
 values:
   lookup:
     pkg_manager: pacman
+    requirements:
+      # I'm currently not sure about those dependencies, also
+      # there is an AUR package.
+      base:
+        - base-devel
+        - git
+        - openssl  # It seems Arch includes the dev libraries by default.
+      gpg:
+        - gpg
+        - python-gnupg
+      mysql:
+        # - libmariadb-dev-compat
+        - mariadb-libs
+      postgresql:
+        - postgresql-libs
+      sqlite:
+        - lib32-sqlite
 ...

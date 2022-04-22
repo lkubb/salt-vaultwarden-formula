@@ -14,4 +14,41 @@
 values:
   lookup:
     pkg_manager: yum
+    requirements:
+      base:
+        - git
+        - openssl-devel
+        # Those are the mandatory packages in "Development Tools" group,
+        # probably not all of them are needed. In Fedora, there's
+        # "@development-tools", which should be almost an exact equivalent
+        # to build-essential on Debian.
+        - autoconf
+        - automake
+        - binutils
+        - bison
+        - flex
+        - gcc
+        - gcc-c++
+        - gdb
+        - glibc-devel
+        - libtool
+        - make
+        - pkgconf
+        - pkgconf-m4
+        - pkgconf-pkg-config
+        - redhat-rpm-config
+        - rpm-build
+        - rpm-sign
+        - strace
+      gpg:
+        - gpg
+        - python-gnupg
+      mysql:
+        # This might make adding the official repo necessary?
+        - mariadb-compat
+        - mariadb-devel
+      postgresql:
+        - libpq-devel
+      sqlite:
+        - sqlite-devel
 ...
