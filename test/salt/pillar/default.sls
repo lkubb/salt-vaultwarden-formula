@@ -20,7 +20,7 @@ warden:
       build: /opt/vaultwarden/src
       conf: /etc/opt/vaultwarden
       data: /opt/vaultwarden/data
-      home: /users/vaultwarden
+      home: /home/vaultwarden
       icon_cache: /opt/vaultwarden/data/icon_cache
       log: /opt/vaultwarden/log
       rsa_keyfile: /opt/vaultwarden/data/rsa_key
