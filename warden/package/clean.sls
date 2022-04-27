@@ -12,7 +12,7 @@ include:
 {%- if warden.version_web_vault %}
   - {{ sls_web_vault_clean }}
 {%- endif %}
-{%- if warden.rust_setup %}
+{%- if warden.rust_setup is sameas true %}
   - {{ sls_rust_clean }}
 {%- endif %}
 
@@ -24,7 +24,7 @@ Vaultwarden is absent:
       - {{ warden.lookup.paths.build }}
     - require:
       - sls: {{ sls_config_clean }}
-{%- if warden.rust_setup %}
+{%- if warden.rust_setup is sameas true %}
       - sls: {{ sls_rust_clean }}
 {%- endif %}
 {%- if warden.version_web_vault %}

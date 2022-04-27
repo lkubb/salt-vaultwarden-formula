@@ -70,9 +70,8 @@ Vaultwarden repository is up to date:
 
 Vaultwarden is compiled from source:
   cmd.run:
-    - name: |
-        cd '{{ warden.lookup.paths.build }}'
-        cargo build --features {{ warden.features | join(',') }} --release
+    - name: cargo build --features {{ warden.features | join(',') }} --release
+    - cwd: {{ warden.lookup.paths.build }}
     - runas: {{ warden.lookup.user }}
     - require:
       - Requirements for compiling vaultwarden are installed
