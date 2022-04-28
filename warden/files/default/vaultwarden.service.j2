@@ -1,3 +1,6 @@
+# This file is managed by Salt.
+# Manual changes might be overwritten.
+
 [Unit]
 Description=Vaultwarden: Bitwarden compatible server
 Documentation=https://github.com/dani-garcia/vaultwarden
@@ -16,31 +19,136 @@ RequiresMountsFor={{ mount }}
 
 [Service]
 ExecStart={{ warden.lookup.paths.bin | path_join('vaultwarden') }}
-Type=simple
-Restart=always
-RestartSec=2s
-User={{ warden.lookup.user }}
-Group={{ warden.lookup.group }}
-WorkingDirectory={{ warden.lookup.paths.bin }}
 
 # Pass through configuration as env vars
 EnvironmentFile={{ warden.lookup.paths.conf | path_join('vaultwarden.conf') }}
 
-# Sandbox vaultwarden
-PrivateTmp=true
-PrivateDevices=true
-ProtectHome=true
-NoNewPrivileges=true
-ProtectSystem=strict
+# Process management
+####################
 
-# Allow writes only on data and log paths
-# + possible custom paths for sends etc.
-ReadWritePaths={{ warden.lookup.paths.data }} {{ warden.lookup.paths.log }} {% if warden._rw -%}
-{{ warden._rw | join(' ') }}{% endif %}
+Type=simple
+Restart=on-failure
+RestartSec=2s
 
 # Set reasonable connection and process limits
 LimitNOFILE=1048576
 LimitNPROC=64
+
+# Directory creation and permissions
+####################################
+
+User={{ warden.lookup.user }}
+Group={{ warden.lookup.group }}
+
+{%- if '/var/lib/vaultwarden' == warden.lookup.paths.data %}
+
+# /var/lib/vaultwarden
+StateDirectory=vaultwarden
+StateDirectoryMode=0710
+{%- else %}
+{%-   do rw.append(warden.lookup.paths.data) %}
+{%- endif %}
+
+{%- if '/var/log/vaultwarden' == warden.lookup.paths.log %}
+
+# /var/log/vaultwarden
+LogsDirectory=vaultwarden
+LogsDirectoryMode=0710
+{%- else %}
+{%-   do rw.append(warden.lookup.paths.log) %}
+{%- endif %}
+
+{%- if rw %}
+
+ReadWritePaths={{ rw | join(' ') }}
+{%- endif %}
+
+# Hardening measures
+####################
+
+# Provide a private /tmp and /var/tmp.
+PrivateTmp=true
+
+# Mount everything but /dev/, /proc/ and /sys/ read-only for the process.
+ProtectSystem=strict
+
+# Deny access to /home, /root and /run/user
+ProtectHome=true
+
+# Disallow the process and all of its children to gain
+# new privileges through execve().
+NoNewPrivileges=true
+
+# Use a new /dev namespace only populated with API pseudo devices
+# such as /dev/null, /dev/zero and /dev/random.
+PrivateDevices=true
+
+# Deny the creation of writable and executable memory mappings.
+MemoryDenyWriteExecute=true
+
+# Make /proc/sys/, /sys/, /proc/sysrq-trigger, /proc/latency_stats, /proc/acpi,
+# /proc/timer_stats, /proc/fs and /proc/irq read-only.
+ProtectKernelTunables=true
+
+# Deny explicit kernel module loading.
+ProtectKernelModules=true
+
+# Deny access to the kernel log ring buffer.
+ProtectKernelLogs=true
+
+# Deny writes to the hardware clock or system clock.
+ProtectClock=true
+
+# Hide processes owned by other users from /proc/.
+ProtectProc=invisible
+
+# Hide all files and directories not directly associated with process management
+# and introspection in the /proc/ file system configured for the unit's processes.
+ProcSubset=pid
+
+# Deny write access to cgroups hierarchies accessible through /sys/fs/cgroup/.
+ProtectControlGroups=true
+
+# Restrict the set of accessible socket address families to those listed.
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+# Deny access to any kind of namespacing.
+RestrictNamespaces=true
+
+# Deny changing the kernel execution domain.
+LockPersonality=true
+
+# This can be used to deny access to specific IP addresses.
+# `any` blocks all.
+# IPAddressDeny=any
+
+# Set up up a new user namespace for the executed processes and
+# configure a minimal user and group mapping.
+PrivateUsers=true
+
+# Deny setting suid/sgid bits.
+RestrictSUIDSGID=true
+
+# Remove all System V and POSIX IPC objects owned by user/group on stop.
+RemoveIPC=true
+
+# Deny any attempts to enable realtime scheduling. (prevent DoS)
+RestrictRealtime=true
+
+# Set up a new UTS namespace and prevent changing hostname/domainname.
+ProtectHostname=true
+
+# Empty capability bounding set.
+CapabilityBoundingSet=
+
+# Allow system calls used by common system services.
+SystemCallFilter=@system-service
+# Explicitly deny system calls listed in the docker seccomp blacklist,
+# except for "clone", which is a core requirement for systemd services.
+SystemCallFilter=~add_key clone3 kcmp keyctl mbind move_pages name_to_handle_at personality process_vm_readv process_vm_writev request_key set_mempolicy setns unshare userfaultfd
+
+# Only permit native system calls.
+SystemCallArchitectures=native
 
 [Install]
 WantedBy=multi-user.target

@@ -20,7 +20,7 @@
       "abbr_pysafe": "warden",
       "pkg": "",
       "needs_repo": "",
-      "config": "/etc/opt/vaultwarden/vaultwarden.conf",
+      "config": "/etc/vaultwarden/vaultwarden.conf",
       "service": "vaultwarden",
       "subcomponent": "web_vault",
       "subcomponent_config": "",
@@ -54,16 +54,16 @@
           ]
         },
         "paths": {
-          "attachments": "/opt/vaultwarden/data/attachments",
+          "attachments": "attachments",
           "bin": "/opt/vaultwarden",
           "build": "/opt/vaultwarden/src",
-          "conf": "/etc/opt/vaultwarden",
-          "data": "/opt/vaultwarden/data",
+          "conf": "/etc/vaultwarden",
+          "data": "/var/lib/vaultwarden",
           "home": "/home/vaultwarden",
-          "icon_cache": "/opt/vaultwarden/data/icon_cache",
-          "log": "/opt/vaultwarden/log",
-          "rsa_keyfile": "/opt/vaultwarden/data/rsa_key",
-          "sends": "/opt/vaultwarden/data/sends",
+          "icon_cache": "icon_cache",
+          "log": "/var/log/vaultwarden",
+          "rsa_keyfile": "rsa_key",
+          "sends": "sends",
           "web_vault": "/opt/vaultwarden/web-vault"
         },
         "service": {
@@ -100,7 +100,7 @@
           "wants": []
         },
         "config": {
-          "database_url": "data/db.sqlite3",
+          "database_url": "db.sqlite3",
           "domain": "http://vault.example.com",
           "signups_allowed": true,
           "signups_verify": false,

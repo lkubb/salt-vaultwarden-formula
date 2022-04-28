@@ -45,7 +45,7 @@ Vaultwarden user paths are setup:
         - mode: '0700'
     - user: {{ warden.lookup.user }}
     - group: {{ warden.lookup.group }}
-    - mode: '0750'
+    - mode: '0710'
     - makedirs: true
     - require:
       - Vaultwarden user/group are present

@@ -15,16 +15,16 @@ warden:
       server: pgp.rediris.es
     group: vaultwarden
     paths:
-      attachments: /opt/vaultwarden/data/attachments
+      attachments: attachments
       bin: /opt/vaultwarden
       build: /opt/vaultwarden/src
-      conf: /etc/opt/vaultwarden
-      data: /opt/vaultwarden/data
+      conf: /etc/vaultwarden
+      data: /var/lib/vaultwarden
       home: /home/vaultwarden
-      icon_cache: /opt/vaultwarden/data/icon_cache
-      log: /opt/vaultwarden/log
-      rsa_keyfile: /opt/vaultwarden/data/rsa_key
-      sends: /opt/vaultwarden/data/sends
+      icon_cache: icon_cache
+      log: /var/log/vaultwarden
+      rsa_keyfile: rsa_key
+      sends: sends
       web_vault: /opt/vaultwarden/web-vault
     pkg:
       latest: https://github.com/dani-garcia/vaultwarden/releases/latest/
@@ -59,7 +59,7 @@ warden:
       source: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz
   config:
     admin_token: ''
-    database_url: data/db.sqlite3
+    database_url: db.sqlite3
     disable_icon_download: false
     domain: http://vault.example.com
     signups_allowed: true

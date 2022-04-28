@@ -55,8 +55,19 @@
 
 
 {#-
+    Parse the data paths. They can be relative to the data folder
+    or absolute.
+-#}
+
+{%- for scope in ['attachments', 'icon_cache', 'rsa_keyfile', 'sends'] -%}
+  {%- if '/' != mapdata.lookup.paths[scope][0] -%}
+    {%- do mapdata.lookup.paths.update({scope: mapdata.lookup.paths.data | path_join(mapdata.lookup.paths[scope])}) -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{#-
     Set the correct path config values automatically.
-    Also, make sure the service has ReadWrite access.
+    Also, make sure the service will have necessary access rights.
 -#}
 
 {%- do mapdata.update({'_rw': {}}) -%}
@@ -71,7 +82,10 @@
   {%- set var, current, default = path -%}
   {%- if current != default -%}
     {%- do mapdata.config.update({var: current}) -%}
-    {%- do mapdata._rw.append(current) -%}
+    {%- if var not in ['data_folder', 'web_vault_folder'] -%}
+      {#- web vault can be read-only, data/logs is ensured in the service template -#}
+      {%- do mapdata._rw.append(current) -%}
+    {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
 
