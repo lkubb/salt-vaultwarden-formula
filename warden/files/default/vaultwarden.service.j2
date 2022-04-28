@@ -10,7 +10,7 @@ After={{ wanted }}.service
 {%- endif %}
 {%- if warden.service.requires_mount %}
 {%-   for mount in warden.service.requires_mount %}
-RequiresMountFor={{ mount }}
+RequiresMountsFor={{ mount }}
 {%-   endfor %}
 {%- endif %}
 
