@@ -3,25 +3,22 @@
 
 {%- set tplroot = tpldir.split('/')[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
-{%- set rustup_init = warden.lookup.paths.home | path_join('rustup-init') %}
+{%- set rustup_init = salt['temp.file']() %}
 
 Rustup-init is available:
   file.managed:
     - name: {{ rustup_init }}
     - source: {{ warden.lookup.rustup_init.source }}
     - source_hash: {{ warden.lookup.rustup_init.source_hash }}
-    - user: {{ warden.lookup.user }}
-    - group: {{ warden.lookup.group }}
-    - makedirs: true
-    - mode: '0755'
-    - require:
-      - Vaultwarden user/group are present
     - unless:
       - sudo -iu '{{ warden.lookup.user }}' command -v rustup
+    - require:
+      - Vaultwarden user/group are present
 
 Rustup is installed for user '{{ warden.lookup.user }}':
-  cmd.run:
-    - name: {{ rustup_init }} -y
+  cmd.script:
+    - name: {{ rustup_init }}
+    - args: -y
     - runas: {{ warden.lookup.user }}
     - require:
       - Rustup-init is available

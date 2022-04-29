@@ -60,7 +60,7 @@ Requirements for compiling vaultwarden are installed:
 
 Vaultwarden repository is up to date:
   git.latest:
-    - name: {{ warden.lookup.pkg.source.format(version=warden.version) }}
+    - name: {{ warden.lookup.pkg.source }}
     - target: {{ warden.lookup.paths.build }}
     - rev: {{ warden.version }}
     - force_reset: true
