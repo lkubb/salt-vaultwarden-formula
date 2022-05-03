@@ -66,6 +66,19 @@
 {%- endfor -%}
 
 {#-
+    Set the log file and web vault paths.
+
+    The latter is necessary because something in the default service
+    seems to break autodiscovery.
+-#}
+
+{%- do mapdata.config.update({
+    'log_file': mapdata.lookup.paths.log | path_join('vaultwarden.log'),
+    'web_vault_folder': mapdata.lookup.paths.web_vault,
+    })
+-%}
+
+{#-
     Set the correct path config values automatically.
     Also, make sure the service will have necessary access rights.
 -#}
@@ -73,7 +86,6 @@
 {%- do mapdata.update({'_rw': {}}) -%}
 {%- for path in [
       ('data_folder', mapdata.lookup.paths.data, mapdata.lookup.paths.bin | path_join('data')),
-      ('web_vault_folder', mapdata.lookup.paths.web_vault, mapdata.lookup.paths.bin | path_join('web-vault')),
       ('attachments_folder', mapdata.lookup.paths.attachments, mapdata.lookup.paths.data | path_join('attachments')),
       ('icon_cache_folder', mapdata.lookup.paths.icon_cache, mapdata.lookup.paths.data | path_join('icon_cache')),
       ('sends_folder', mapdata.lookup.paths.sends, mapdata.lookup.paths.data | path_join('sends')),
@@ -88,5 +100,3 @@
     {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
-
-{%- do mapdata.config.update({'log_file': mapdata.lookup.paths.log | path_join('vaultwarden.log')}) -%}
