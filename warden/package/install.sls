@@ -109,3 +109,22 @@ Vaultwarden service unit is installed:
     - onchanges:
       - file: {{ warden.lookup.service.unit.format(name=warden.lookup.service.name) }}
 {%- endif %}
+
+{%- if 'logrotate' | which %}
+
+Logrotate is setup for vaultwarden:
+  file.managed:
+    - name: /etc/logrotate.d/vaultwarden
+    - source: {{ files_switch(
+                    ['logrotate.j2'],
+                    lookup='Logrotate is setup for vaultwarden',
+                  ) }}
+    - template: jinja
+    - mode: '0644'
+    - user: root
+    - group: {{ warden.lookup.rootgroup }}
+    - makedirs: true
+    - context: {{ {'warden': warden} | json }}
+    - require:
+      - Vaultwarden binary is installed
+{%- endif %}

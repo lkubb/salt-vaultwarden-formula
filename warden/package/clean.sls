@@ -22,6 +22,7 @@ Vaultwarden is absent:
       - {{ warden.lookup.service.unit.format(name=warden.lookup.service.name) }}
       - {{ warden.lookup.paths.bin | path_join('vaultwarden') }}
       - {{ warden.lookup.paths.build }}
+      - /etc/logrotate.d/vaultwarden
     - require:
       - sls: {{ sls_config_clean }}
 {%- if warden.rust_setup is sameas true %}
