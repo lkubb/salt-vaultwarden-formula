@@ -74,5 +74,6 @@ repos:
                 docs/CONTRIBUTING_DOCS.rst|
                 docs/index.rst|
                 docs/pillar.rst|
+                docs/README.rst|
             )$
         additional_dependencies: [pygments==2.9.0]

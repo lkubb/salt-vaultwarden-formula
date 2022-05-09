@@ -16,7 +16,7 @@ Vaultwarden Formula
 
 Manage Vaultwarden inofficial Bitwarden server with Salt. This will compile the binary from source and manage the service and configuration.
 
-Installing and configuring a `reverse proxy <https://github.com/dani-garcia/vaultwarden/wiki/Proxy-examples>`_, `fail2ban <https://github.com/dani-garcia/vaultwarden/wiki/Fail2Ban-Setup>`_ and possibly `log shipping <https://selivan.github.io/2017/02/07/rsyslog-log-forward-save-filename-handle-multi-line-failover.html>`_ (if you run those on another system) are *currently* out of scope. For hints, see `the official docs <https://github.com/dani-garcia/vaultwarden/wiki>`_.
+Installing and configuring a `reverse proxy <https://github.com/dani-garcia/vaultwarden/wiki/Proxy-examples>`_, `fail2ban <https://github.com/dani-garcia/vaultwarden/wiki/Fail2Ban-Setup>`_ and possibly `log shipping <https://selivan.github.io/2017/02/07/rsyslog-log-forward-save-filename-handle-multi-line-failover.html>`_ (if you run those on another system) are out of scope for this formula. For hints, see `the official docs <https://github.com/dani-garcia/vaultwarden/wiki>`_. I wrote formulae for Rsyslog and Fail2Ban to take care of the latter two. For an example configuration, see :ref:`integration`.
 
 This was written for Debian-based systems primarily, although adapting the formula should be easy.
 
