@@ -23,6 +23,10 @@ Vaultwarden signing key is present (from keyserver):
     - require:
       - Salt can manage gpg for vaulwarden web vault
 
+# This fallback is actually often (never?) reached since
+# gpg.present reports success even though no key could be
+# imported (at least with missing keyservers or import fail
+# because of missing ID). FIXME: the Salt gpg modules need some love
 Vaultwarden signing key is present (fallback):
   file.managed:
     - name: /tmp/vw-key.asc
@@ -58,10 +62,12 @@ Vaultwarden web vault is downloaded:
       - Vaultwarden key is actually present
 
 Vaultwarden web vault signature is verified:
-  module.run:
-    - gpg.verify:
-      - filename: /tmp/web-vault-{{ warden.version_web_vault }}.tar.gz
-      - signature: /tmp/web-vault-{{ warden.version_web_vault }}.tar.gz.asc
+  test.configurable_test_state:
+    - name: Check if the downloaded web vault archive has been signed by the author.
+    - changes: False
+    - result: >
+        __slot__:salt:gpg.verify(filename=/tmp/web-vault-{{ warden.version_web_vault }}.tar.gz,
+        signature=/tmp/web-vault-{{ warden.version_web_vault }}.tar.gz.asc).res
     - require:
       - Vaultwarden key is actually present
       - Vaultwarden web vault is downloaded
