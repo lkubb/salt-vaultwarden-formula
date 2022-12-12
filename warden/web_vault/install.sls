@@ -15,18 +15,13 @@ Salt can manage gpg for vaulwarden web vault:
 # I could find the key on keys.openpgpg.org, but gpg does not
 # import it (no user ID). Seems only pgp.rediris.es has
 # it as required atm, so I included it in `files` for reference.
-# Salt still reported it as present, although gpg did not import it.
 Vaultwarden signing key is present (from keyserver):
   gpg.present:
-    - name: {{ warden.lookup.gpg.key }}
+    - name: {{ warden.lookup.gpg.key[:-16] }}
     - keyserver: {{ warden.lookup.gpg.server }}
     - require:
       - Salt can manage gpg for vaulwarden web vault
 
-# This fallback is actually often (never?) reached since
-# gpg.present reports success even though no key could be
-# imported (at least with missing keyservers or import fail
-# because of missing ID). FIXME: the Salt gpg modules need some love
 Vaultwarden signing key is present (fallback):
   file.managed:
     - name: /tmp/vw-key.asc
@@ -41,14 +36,18 @@ Vaultwarden signing key is present (fallback):
     - require:
       - file: /tmp/vw-key.asc
 
-# Fun fact:
-# When the signature cannot be verified because the key is missing,
-# `gpg.verify` just returns true. Huh. Unexpected.
-# I should definitely write a function for the state module.
+{%- if "gpg.verified" not in salt %}
+
+# Ensure the following does not run without the key being present.
+# The official gpg modules are currently big liars and always report
+# `Yup, no worries! Everything is fine.`
 Vaultwarden key is actually present:
   module.run:
     - gpg.get_key:
       - fingerprint: {{ warden.lookup.gpg.key }}
+    - require_in:
+      - Vaultwarden web vault is downloaded
+{%- endif %}
 
 Vaultwarden web vault is downloaded:
   file.managed:
@@ -58,8 +57,8 @@ Vaultwarden web vault is downloaded:
       - /tmp/web-vault-{{ warden.version_web_vault }}.tar.gz.asc:
         - source: {{ warden.lookup.web_vault.sig.format(version=warden.version_web_vault) }}
     - skip_verify: true
-    - require:
-      - Vaultwarden key is actually present
+
+{%- if "gpg.verified" not in salt %}
 
 Vaultwarden web vault signature is verified:
   test.configurable_test_state:
@@ -71,6 +70,14 @@ Vaultwarden web vault signature is verified:
     - require:
       - Vaultwarden key is actually present
       - Vaultwarden web vault is downloaded
+{%- else %}
+
+Vaultwarden web vault signature is verified:
+  gpg.verified:
+    - name: /tmp/web-vault-{{ warden.version_web_vault }}.tar.gz
+    - signature: /tmp/web-vault-{{ warden.version_web_vault }}.tar.gz.asc
+    - signed_by_any: {{ warden.lookup.gpg.key }}
+{%- endif %}
 
 Vaultwarden web is removed if signature verification failed:
   file.absent:
