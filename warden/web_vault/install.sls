@@ -36,7 +36,7 @@ Vaultwarden signing key is present (fallback):
     - require:
       - file: /tmp/vw-key.asc
 
-{%- if "gpg.verified" not in salt %}
+{%- if "gpg" not in salt["saltutil.list_extmods"]().get("states", []) %}
 
 # Ensure the following does not run without the key being present.
 # The official gpg modules are currently big liars and always report
@@ -58,7 +58,7 @@ Vaultwarden web vault is downloaded:
         - source: {{ warden.lookup.web_vault.sig.format(version=warden.version_web_vault) }}
     - skip_verify: true
 
-{%- if "gpg.verified" not in salt %}
+{%- if "gpg" not in salt["saltutil.list_extmods"]().get("states", []) %}
 
 Vaultwarden web vault signature is verified:
   test.configurable_test_state:
