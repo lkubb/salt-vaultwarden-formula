@@ -16,7 +16,7 @@ Salt can manage gpg for vaulwarden web vault:
 # it as required atm, so I included it in `files` for reference.
 Vaultwarden signing key is present (from keyserver):
   gpg.present:
-    - name: {{ warden.lookup.gpg.key[:-16] }}
+    - name: {{ warden.lookup.gpg.key[-16:] }}
     - keyserver: {{ warden.lookup.gpg.server }}
     - require:
       - Salt can manage gpg for vaulwarden web vault
