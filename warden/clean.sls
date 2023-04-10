@@ -1,7 +1,16 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{#-
+    *Meta-state*.
+
+    Undoes everything performed in the ``warden`` meta-state
+    in reverse order, i.e.
+    stops the service,
+    removes the configuration file and then
+    uninstalls the package.
+#}
+
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
 
 include:

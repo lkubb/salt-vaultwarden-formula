@@ -1,10 +1,14 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
-{%- set sls_config_clean = tplroot ~ '.config.clean' %}
-{%- set sls_rust_clean = tplroot ~ '.rust.clean' %}
-{%- set sls_web_vault_clean = tplroot ~ '.web_vault.clean' %}
+{#-
+    Removes the warden package.
+    Has a depency on `warden.config.clean`_.
+#}
+
+{%- set tplroot = tpldir.split("/")[0] %}
+{%- set sls_config_clean = tplroot ~ ".config.clean" %}
+{%- set sls_rust_clean = tplroot ~ ".rust.clean" %}
+{%- set sls_web_vault_clean = tplroot ~ ".web_vault.clean" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
 
 include:
@@ -20,7 +24,7 @@ Vaultwarden is absent:
   file.absent:
     - names:
       - {{ warden.lookup.service.unit.format(name=warden.lookup.service.name) }}
-      - {{ warden.lookup.paths.bin | path_join('vaultwarden') }}
+      - {{ warden.lookup.paths.bin | path_join("vaultwarden") }}
       - {{ warden.lookup.paths.build }}
       - /etc/logrotate.d/vaultwarden
     - require:

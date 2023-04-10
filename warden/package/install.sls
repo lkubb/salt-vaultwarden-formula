@@ -1,15 +1,14 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
-{%- set sls_require_rust = '' %}
+{%- set sls_require_rust = "" %}
 
 {%- if warden.rust_setup %}
 include:
 {%-   if warden.rust_setup is boolean %}
-{%-     set sls_require_rust = tplroot ~ '.rust.install' %}
+{%-     set sls_require_rust = tplroot ~ ".rust.install" %}
 {%-   else %}
 {%-     set sls_require_rust = warden.rust_setup %}
 {%-   endif %}
@@ -36,7 +35,7 @@ Vaultwarden user/group are present:
 Vaultwarden user paths are setup:
   file.directory:
     - names:
-{%- for dir in ['attachments', 'bin', 'build', 'data', 'icon_cache', 'log', 'sends', 'web_vault'] %}
+{%- for dir in ["attachments", "bin", "build", "data", "icon_cache", "log", "sends", "web_vault"] %}
       - {{ warden.lookup.paths[dir] }}
 {%- endfor %}
       - {{ warden.lookup.paths.conf }}:
@@ -70,7 +69,7 @@ Vaultwarden repository is up to date:
 
 Vaultwarden is compiled from source:
   cmd.run:
-    - name: cargo build --features {{ warden.features | join(',') }} --release
+    - name: cargo build --features {{ warden.features | join(",") }} --release
     - cwd: {{ warden.lookup.paths.build }}
     - runas: {{ warden.lookup.user }}
     - require:
@@ -80,8 +79,8 @@ Vaultwarden is compiled from source:
 
 Vaultwarden binary is installed:
   file.copy:
-    - name: {{ warden.lookup.paths.bin | path_join('vaultwarden') }}
-    - source: {{ warden.lookup.paths.build | path_join('target', 'release', 'vaultwarden') }}
+    - name: {{ warden.lookup.paths.bin | path_join("vaultwarden") }}
+    - source: {{ warden.lookup.paths.build | path_join("target", "release", "vaultwarden") }}
     - user: {{ warden.lookup.user }}
     - group: {{ warden.lookup.group }}
     - onchanges:
@@ -91,18 +90,18 @@ Vaultwarden service unit is installed:
   file.managed:
     - name: {{ warden.lookup.service.unit.format(name=warden.lookup.service.name) }}
     - source: {{ files_switch(
-                    ['vaultwarden.service.j2'],
-                    lookup='Vaultwarden service unit is installed',
+                    ["vaultwarden.service.j2"],
+                    lookup="Vaultwarden service unit is installed",
                   ) }}
     - template: jinja
     - mode: '0644'
     - user: root
     - group: {{ warden.lookup.rootgroup }}
     - makedirs: true
-    - context: {{ {'warden': warden} | json }}
+    - context: {{ {"warden": warden} | json }}
     - require:
       - Vaultwarden binary is installed
-{%- if 'systemctl' | which %}
+{%- if "systemctl" | which %}
   # this executes systemctl daemon-reload
   module.run:
     - service.systemctl_reload: []
@@ -110,21 +109,21 @@ Vaultwarden service unit is installed:
       - file: {{ warden.lookup.service.unit.format(name=warden.lookup.service.name) }}
 {%- endif %}
 
-{%- if 'logrotate' | which %}
+{%- if "logrotate" | which %}
 
 Logrotate is setup for vaultwarden:
   file.managed:
     - name: /etc/logrotate.d/vaultwarden
     - source: {{ files_switch(
-                    ['logrotate.j2'],
-                    lookup='Logrotate is setup for vaultwarden',
+                    ["logrotate.j2"],
+                    lookup="Logrotate is setup for vaultwarden",
                   ) }}
     - template: jinja
     - mode: '0644'
     - user: root
     - group: {{ warden.lookup.rootgroup }}
     - makedirs: true
-    - context: {{ {'warden': warden} | json }}
+    - context: {{ {"warden": warden} | json }}
     - require:
       - Vaultwarden binary is installed
 {%- endif %}

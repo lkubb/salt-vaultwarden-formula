@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
 
 Salt can manage gpg for vaulwarden web vault:
@@ -63,7 +62,7 @@ Vaultwarden web vault is downloaded:
 Vaultwarden web vault signature is verified:
   test.configurable_test_state:
     - name: Check if the downloaded web vault archive has been signed by the author.
-    - changes: False
+    - changes: false
     - result: >
         __slot__:salt:gpg.verify(filename=/tmp/web-vault-{{ warden.version_web_vault }}.tar.gz,
         signature=/tmp/web-vault-{{ warden.version_web_vault }}.tar.gz.asc).res
