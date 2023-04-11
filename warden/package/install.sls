@@ -111,13 +111,6 @@ Vaultwarden service unit is installed:
     - context: {{ {"warden": warden} | json }}
     - require:
       - Vaultwarden binary is installed
-{%- if "systemctl" | which %}
-  # this executes systemctl daemon-reload
-  module.run:
-    - service.systemctl_reload: []
-    - onchanges:
-      - file: {{ warden.lookup.service.unit.format(name=warden.lookup.service.name) }}
-{%- endif %}
 
 # sanity check
 Check the current version matches the expected now:
