@@ -67,6 +67,15 @@ Vaultwarden repository is up to date:
     - require:
       - Vaultwarden user paths are setup
 
+# To avoid situations where a build fails once and then does
+# not get retriggered in subsequent runs
+Trigger build unless version matches:
+  test.succeed_with_changes:
+    - unless:
+      - test $({{ warden.lookup.paths.bin | path_join("vaultwarden") }} --version | grep -Eo '[0-9\.]+$') = '{{ warden.version }}'
+    - require:
+      - Vaultwarden repository is up to date
+
 Vaultwarden is compiled from source:
   cmd.run:
     - name: cargo build --features {{ warden.features | join(",") }} --release
@@ -76,6 +85,7 @@ Vaultwarden is compiled from source:
       - Requirements for compiling vaultwarden are installed
     - onchanges:
       - Vaultwarden repository is up to date
+      - Trigger build unless version matches
 
 Vaultwarden binary is installed:
   file.copy:
@@ -108,6 +118,14 @@ Vaultwarden service unit is installed:
     - onchanges:
       - file: {{ warden.lookup.service.unit.format(name=warden.lookup.service.name) }}
 {%- endif %}
+
+# sanity check
+Check the current version matches the expected now:
+  test.fail_without_changes:
+    - unless:
+      - test $({{ warden.lookup.paths.bin | path_join("vaultwarden") }} --version | grep -Eo '[0-9\.]+$') = '{{ warden.version }}'
+    - require:
+      - Vaultwarden binary is installed
 
 {%- if "logrotate" | which %}
 
