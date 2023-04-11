@@ -105,7 +105,7 @@ warden:
         - libsqlite3-dev
     rustup_init:
       source: https://sh.rustup.rs
-      source_hash: a3cb081f88a6789d104518b30d4aa410009cd08c3822a1226991d6cf0442a0f8
+      source_hash: 41262c98ae4effc2a752340608542d9fe411da73aca5fbe947fe45f61b7bd5cf
     service:
       name: vaultwarden
       unit: /etc/systemd/system/{name}.service
