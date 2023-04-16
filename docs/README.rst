@@ -94,12 +94,18 @@ Has a dependency on `warden.config`_.
 
 ``warden.rust``
 ^^^^^^^^^^^^^^^
+Installs rustup-init and Rust nightly in order to compile vaultwarden.
 
+Warning:
+  The rustup-init installation pipes the output of ``warden.lookup.rustup_init.source``
+  into a shell of the build user. The file hash is verified against ``warden.lookup.rustup_init.source_hash``.
+  You can override the URL in ``warden.lookup.rustup_init.source`` for a local source.
 
 
 ``warden.web_vault``
 ^^^^^^^^^^^^^^^^^^^^
-
+Installs the web vault from Github releases (by default).
+Checks signatures before extracting.
 
 
 ``warden.clean``
@@ -132,12 +138,12 @@ Stops the warden service and disables it at boot time.
 
 ``warden.rust.clean``
 ^^^^^^^^^^^^^^^^^^^^^
-
+Uninstalls the Rust toolchain.
 
 
 ``warden.web_vault.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
+Removes the Web vault.
 
 
 

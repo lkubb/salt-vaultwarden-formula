@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
+{%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
-{%- set rustup_init = salt['temp.file']() %}
+{%- set rustup_init = salt["temp.file"]() %}
 
 Rustup-init is available:
   file.managed:

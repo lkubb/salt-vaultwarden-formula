@@ -1,9 +1,13 @@
-# -*- coding: utf-8 -*-
 # vim: ft=sls
 
-{%- set tplroot = tpldir.split('/')[0] %}
-{%- set sls_config_clean = tplroot ~ '.config.clean' %}
-{%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
+{#-
+    Installs rustup-init and Rust nightly in order to compile vaultwarden.
+
+    Warning:
+      The rustup-init installation pipes the output of ``warden.lookup.rustup_init.source``
+      into a shell of the build user. The file hash is verified against ``warden.lookup.rustup_init.source_hash``.
+      You can override the URL in ``warden.lookup.rustup_init.source`` for a local source.
+#}
 
 include:
   - .install
