@@ -93,7 +93,7 @@ Vaultwarden binary is installed:
     - source: {{ warden.lookup.paths.build | path_join("target", "release", "vaultwarden") }}
     - user: {{ warden.lookup.user }}
     - group: {{ warden.lookup.group }}
-    - remove_existing: true
+    - force: true
     - onchanges:
       - Vaultwarden is compiled from source
 
