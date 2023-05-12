@@ -6,12 +6,12 @@ warden:
     # Just for testing purposes
     winner: lookup
     added_in_lookup: lookup_value
-    config: '/etc/opt/vaultwarden/vaultwarden.conf'
-    service:
-      name: vaultwarden
+    config: '/etc/vaultwarden/vaultwarden.conf'
     gpg:
-      key: B9B7A108373276BF3C0406F9FC8A7D14C3CD543A
-      server: pgp.rediris.es
+      keys:
+        - B9B7A108373276BF3C0406F9FC8A7D14C3CD543A
+        - 3C5BBC173D81186CFFDE72A958C80A2AA6C765E1
+      server: pgp.mit.edu
     group: vaultwarden
     paths:
       attachments: attachments

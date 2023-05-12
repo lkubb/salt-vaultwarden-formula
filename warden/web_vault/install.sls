@@ -16,7 +16,10 @@ Salt can manage gpg for vaulwarden web vault:
 # it as required atm, so I included it in `files` for reference.
 Vaultwarden signing key is present (from keyserver):
   gpg.present:
-    - name: {{ warden.lookup.gpg.key[-16:] }}
+    - names:
+{%- for key in warden.lookup.gpg["keys"] %}
+      - {{ key[-16:] }}
+{%- endfor %}
     - keyserver: {{ warden.lookup.gpg.server }}
     - require:
       - Salt can manage gpg for vaulwarden web vault
@@ -40,10 +43,12 @@ Vaultwarden signing key is present (fallback):
 # Ensure the following does not run without the key being present.
 # The official gpg modules are currently big liars and always report
 # `Yup, no worries! Everything is fine.`
-Vaultwarden key is actually present:
+Vaultwarden keys are actually present:
   module.run:
+{%-   for key in warden.lookup.gpg["keys"] %}
     - gpg.get_key:
-      - fingerprint: {{ warden.lookup.gpg.key }}
+      - fingerprint: {{ key }}
+{%-   endfor %}
     - require_in:
       - Vaultwarden web vault is downloaded
 {%- endif %}
@@ -75,7 +80,7 @@ Vaultwarden web vault signature is verified:
   gpg.verified:
     - name: /tmp/web-vault-{{ warden.version_web_vault }}.tar.gz
     - signature: /tmp/web-vault-{{ warden.version_web_vault }}.tar.gz.asc
-    - signed_by_any: {{ warden.lookup.gpg.key }}
+    - signed_by_any: {{ warden.lookup.gpg["keys"] }}
 {%- endif %}
 
 Vaultwarden web is removed if signature verification failed:
