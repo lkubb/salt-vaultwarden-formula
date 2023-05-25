@@ -5,7 +5,7 @@
 {%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
 {%- set sls_require_rust = "" %}
 
-{%- if warden.rust_setup %}
+{%- if not warden.install.source and warden.rust_setup %}
 include:
 {%-   if warden.rust_setup is boolean %}
 {%-     set sls_require_rust = tplroot ~ ".rust.install" %}
@@ -49,13 +49,15 @@ Vaultwarden user paths are setup:
     - require:
       - Vaultwarden user/group are present
 
+{%- if not warden.install.source %}
+
 Requirements for compiling vaultwarden are installed:
   pkg.installed:
     - pkgs: {{ warden._deps }}
-{%- if sls_require_rust %}
+{%-   if sls_require_rust %}
     - require:
       - sls: {{ sls_require_rust }}
-{%- endif %}
+{%-   endif %}
 
 Vaultwarden repository is up to date:
   git.latest:
@@ -96,6 +98,29 @@ Vaultwarden binary is installed:
     - force: true
     - onchanges:
       - Vaultwarden is compiled from source
+{%- else %}
+
+Vaultwarden binary is installed:
+  file.managed:
+    - name: {{ warden.lookup.paths.bin | path_join("vaultwarden") }}
+    - source:
+{%-   set sources = warden.install.source %}
+{%-   if not sources | is_list %}
+{%-     set sources = [sources] %}
+{%-   endif %}
+{%-   for src in sources %}
+      - {{ src.format(version=warden.version) }}
+{%-   endfor %}
+{%-   for param, val in warden.install.items() %}
+{%-     if param in ["source", "user", "group", "name", "mode"] %}
+{%-       continue %}
+{%-     endif %}
+    - {{ param }}: {{ val.format(version=warden.version) if val is string else val | json }}
+{%-   endfor %}
+    - user: {{ warden.lookup.user }}
+    - group: {{ warden.lookup.group }}
+    - mode: '0755'
+{%- endif %}
 
 Vaultwarden service unit is installed:
   file.managed:

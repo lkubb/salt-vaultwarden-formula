@@ -73,6 +73,8 @@ warden:
     - mysql
     - postgresql
     - sqlite
+  install:
+    source: []
   rust_setup: true
   service:
     requires_mount: []

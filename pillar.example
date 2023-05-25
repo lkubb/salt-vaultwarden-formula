@@ -10,6 +10,12 @@ warden:
     # Set to `false` to disable the installation.
   version_web_vault: latest
 
+    # If you want to install a compiled Vaultwarden binary,
+    # you can list parameters for a `file.managed` state here.
+    # If a source is defined, the compilation will be skipped.
+  install:
+    source: []
+
     # Since this formula compiles vaultwarden, a functional Rust toolchain
     # is required. Set this to false to skip inbuilt installation or to a
     # string that represents a state than can be imported and required.

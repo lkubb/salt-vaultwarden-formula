@@ -90,6 +90,9 @@
         }
       },
       "settings": {
+        "install": {
+          "source": []
+        },
         "version": "latest",
         "version_web_vault": "latest",
         "rust_setup": true,
