@@ -20,9 +20,6 @@ values:
         - base-devel
         - git
         - openssl  # It seems Arch includes the dev libraries by default.
-      gpg:
-        - gpg
-        - python-gnupg
       mysql:
         # - libmariadb-dev-compat
         - mariadb-libs

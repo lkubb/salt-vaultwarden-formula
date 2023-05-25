@@ -3,9 +3,20 @@
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
 
-Salt can manage gpg for vaulwarden web vault:
+{#- very crude onedir check – relenv pythonexecutable does not end with `run` #}
+{%- set onedir = grains.pythonexecutable.startswith("/opt/saltstack") %}
+
+Salt can manage gpg for vaultwarden web vault:
+{%- if onedir %}
+  pip.installed:
+    - name: {{ warden.lookup.requirements.gpg.lib.pip }}
+{%- endif %}
   pkg.installed:
-    - pkgs: {{ warden.lookup.requirements.gpg | json }}
+    - pkgs:
+      - {{ warden.lookup.requirements.gpg.pkg }}
+{%- if not onedir %}
+      - {{ warden.lookup.requirements.gpg.lib.pkg }}
+{%- endif %}
   cmd.run:
     - name: gpg --list-keys
     - unless:
@@ -22,7 +33,7 @@ Vaultwarden signing key is present (from keyserver):
 {%- endfor %}
     - keyserver: {{ warden.lookup.gpg.server }}
     - require:
-      - Salt can manage gpg for vaulwarden web vault
+      - Salt can manage gpg for vaultwarden web vault
 
 Vaultwarden signing key is present (fallback):
   file.managed:

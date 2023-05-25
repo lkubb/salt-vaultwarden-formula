@@ -35,8 +35,10 @@ warden:
         - pkg-config
         - libssl-dev
       gpg:
-        - gpg
-        - python3-gnupg
+        lib:
+          pip: python-gnupg
+          pkg: python3-gnupg
+        pkg: gpg
       mysql:
         - libmariadb-dev-compat
         - libmariadb-dev

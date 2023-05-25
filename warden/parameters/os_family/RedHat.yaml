@@ -40,8 +40,7 @@ values:
         - rpm-sign
         - strace
       gpg:
-        - gpg
-        - python-gnupg
+        pkg: gnupg2
       mysql:
         # This might make adding the official repo necessary?
         - mariadb-compat
