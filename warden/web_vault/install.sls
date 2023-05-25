@@ -6,7 +6,7 @@
 {#- very crude onedir check – relenv pythonexecutable does not end with `run` #}
 {%- set onedir = grains.pythonexecutable.startswith("/opt/saltstack") %}
 
-Salt can manage gpg for vaultwarden web vault:
+Salt deps for vaultwarden web vault:
 {%- if onedir %}
   pip.installed:
     - name: {{ warden.lookup.requirements.gpg.lib.pip }}
@@ -14,6 +14,7 @@ Salt can manage gpg for vaultwarden web vault:
   pkg.installed:
     - pkgs:
       - {{ warden.lookup.requirements.gpg.pkg }}
+      - tar
 {%- if not onedir %}
       - {{ warden.lookup.requirements.gpg.lib.pkg }}
 {%- endif %}
@@ -33,7 +34,7 @@ Vaultwarden signing key is present (from keyserver):
 {%- endfor %}
     - keyserver: {{ warden.lookup.gpg.server }}
     - require:
-      - Salt can manage gpg for vaultwarden web vault
+      - Salt deps for vaultwarden web vault
 
 Vaultwarden signing key is present (fallback):
   file.managed:
