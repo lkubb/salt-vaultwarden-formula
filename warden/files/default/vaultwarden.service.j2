@@ -1,3 +1,5 @@
+{%- set glibc = salt["pkg.version"]("glibc") %}
+{%- set clone3 = salt["pkg.version_cmp"](glibc, "2.34") >= 0 %}
 {%- set rw = warden._rw -%}
 
 # This file is managed by Salt.
@@ -147,7 +149,7 @@ CapabilityBoundingSet=
 SystemCallFilter=@system-service
 # Explicitly deny system calls listed in the docker seccomp blacklist,
 # except for "clone", which is a core requirement for systemd services.
-SystemCallFilter=~add_key clone3 kcmp keyctl mbind move_pages name_to_handle_at personality process_vm_readv process_vm_writev request_key set_mempolicy setns unshare userfaultfd
+SystemCallFilter=~add_key {%- if not clone3 %} clone3{%- endif %} kcmp keyctl mbind move_pages name_to_handle_at personality process_vm_readv process_vm_writev request_key set_mempolicy setns unshare userfaultfd
 
 # Only permit native system calls.
 SystemCallArchitectures=native
