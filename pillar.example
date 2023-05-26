@@ -16,6 +16,9 @@ warden:
   install:
     source: []
 
+    # Open necessary ports on RedHat family automatically
+  manage_firewall: false
+
     # Since this formula compiles vaultwarden, a functional Rust toolchain
     # is required. Set this to false to skip inbuilt installation or to a
     # string that represents a state than can be imported and required.
@@ -103,7 +106,7 @@ warden:
       gpg:
         lib:
           pip: python-gnupg
-          pkg: python-gnupg
+          pkg: python3-gnupg
         pkg: gpg
       mysql:
         - libmariadb-dev-compat

@@ -42,7 +42,7 @@
           ],
           "gpg": {
             "lib": {
-              "pkg": "python-gnupg",
+              "pkg": "python3-gnupg",
               "pip": "python-gnupg"
             },
             "pkg": "gpg"
@@ -96,6 +96,7 @@
         "install": {
           "source": []
         },
+        "manage_firewall": false,
         "version": "latest",
         "version_web_vault": "latest",
         "rust_setup": true,

@@ -3,7 +3,7 @@
 control 'warden.config.file' do
   title 'Verify the configuration file'
 
-  describe file('/etc/opt/vaultwarden/vaultwarden.conf') do
+  describe file('/etc/vaultwarden/vaultwarden.conf') do
     it { should be_file }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }

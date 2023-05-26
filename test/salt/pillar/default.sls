@@ -77,6 +77,7 @@ warden:
     - sqlite
   install:
     source: []
+  manage_firewall: false
   rust_setup: true
   service:
     requires_mount: []
