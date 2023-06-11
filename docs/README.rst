@@ -86,6 +86,12 @@ Manages the warden service configuration.
 Has a dependency on `warden.package`_.
 
 
+``warden.web_vault``
+^^^^^^^^^^^^^^^^^^^^
+Installs the web vault from Github releases (by default).
+Checks signatures before extracting.
+
+
 ``warden.service``
 ^^^^^^^^^^^^^^^^^^
 Starts the warden service and enables it at boot time.
@@ -102,12 +108,6 @@ Warning:
   You can override the URL in ``warden.lookup.rustup_init.source`` for a local source.
 
 
-``warden.web_vault``
-^^^^^^^^^^^^^^^^^^^^
-Installs the web vault from Github releases (by default).
-Checks signatures before extracting.
-
-
 ``warden.clean``
 ^^^^^^^^^^^^^^^^
 *Meta-state*.
@@ -122,13 +122,18 @@ uninstalls the package.
 ``warden.package.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^^
 Removes the warden package.
-Has a depency on `warden.config.clean`_.
+Has a dependency on `warden.config.clean`_.
 
 
 ``warden.config.clean``
 ^^^^^^^^^^^^^^^^^^^^^^^
 Removes the configuration of the warden service and has a
 dependency on `warden.service.clean`_.
+
+
+``warden.web_vault.clean``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+Removes the Web vault.
 
 
 ``warden.service.clean``
@@ -139,11 +144,6 @@ Stops the warden service and disables it at boot time.
 ``warden.rust.clean``
 ^^^^^^^^^^^^^^^^^^^^^
 Uninstalls the Rust toolchain.
-
-
-``warden.web_vault.clean``
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-Removes the Web vault.
 
 
 

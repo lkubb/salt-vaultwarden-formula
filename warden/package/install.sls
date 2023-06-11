@@ -2,7 +2,7 @@
 
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
-{%- from tplroot ~ "/libtofs.jinja" import files_switch with context %}
+{%- from tplroot ~ "/libtofsstack.jinja" import files_switch with context %}
 {%- set sls_require_rust = "" %}
 
 {%- if not warden.install.source and warden.rust_setup %}
@@ -126,9 +126,11 @@ Vaultwarden service unit is installed:
   file.managed:
     - name: {{ warden.lookup.service.unit.format(name=warden.lookup.service.name) }}
     - source: {{ files_switch(
-                    ["vaultwarden.service.j2"],
+                    ["vaultwarden.service", "vaultwarden.service.j2"],
+                    config=warden,
                     lookup="Vaultwarden service unit is installed",
-                  ) }}
+                  )
+              }}
     - template: jinja
     - mode: '0644'
     - user: root
@@ -152,9 +154,11 @@ Logrotate is setup for vaultwarden:
   file.managed:
     - name: /etc/logrotate.d/vaultwarden
     - source: {{ files_switch(
-                    ["logrotate.j2"],
+                    ["logrotate", "logrotate.j2"],
+                    config=warden,
                     lookup="Logrotate is setup for vaultwarden",
-                  ) }}
+                  )
+              }}
     - template: jinja
     - mode: '0644'
     - user: root

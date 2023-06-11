@@ -2,7 +2,7 @@
 
 {#-
     Removes the warden package.
-    Has a depency on `warden.config.clean`_.
+    Has a dependency on `warden.config.clean`_.
 #}
 
 {%- set tplroot = tpldir.split("/")[0] %}
