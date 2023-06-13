@@ -11,7 +11,6 @@ I wrote a formula that can be used to `manage fail2ban <https://github.com/lkubb
 
 .. code-block:: yaml
 
-  # -*- coding: utf-8 -*-
   # vim: ft=yaml
   ---
   values:
@@ -60,7 +59,6 @@ This is for the system running Vaultwarden.
 
 .. code-block:: yaml
 
-  # -*- coding: utf-8 -*-
   # vim: ft=yaml
   ---
   values:
@@ -86,7 +84,6 @@ This is for the system running the reverse proxy:
 
 .. code-block:: yaml
 
-  # -*- coding: utf-8 -*-
   # vim: ft=yaml
   ---
   values:

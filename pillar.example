@@ -19,9 +19,10 @@ warden:
     # Open necessary ports on RedHat family automatically
   manage_firewall: false
 
-    # Since this formula compiles vaultwarden, a functional Rust toolchain
+    # For compilation of Vaultwarden, a functional Rust toolchain
     # is required. Set this to false to skip inbuilt installation or to a
     # string that represents a state than can be imported and required.
+    # The default value of true will use the inbuilt state of this formula.
   rust_setup: true
 
     # Which databases to support in the compiled binary.
@@ -33,17 +34,17 @@ warden:
 
     # If the service unit should require a mount for a specific path
     # or wait for the success of another unit (eg database), specify
-    # that here. Mount should be a list of paths, wants should be a
-    # list of unit names, without `.service`.
+    # that here. `requires_mount` should be a list of paths, `wants` should be a
+    # list of unit names, without the `.service` suffix.
   service:
     requires_mount: []
     wants: []
 
     # This is where you can specify the actual configuration.
-    # It will be dumped into environment variables used for vaultwarden.
+    # It will be dumped into environment variables used for Vaultwarden.
     # That means, if you have activated the admin panel, configuration
     # done there will overwrite the ones specified here.
-    # It is advised to stick to lower case for the keysto prevent possible
+    # It is advised to stick to lower case for the keys to prevent possible
     # issues with the autoconfiguration done in `post-map.jinja`.
     # You do not need to specify the paths.
     # List of possible configuration vars:

@@ -14,13 +14,15 @@ Vaultwarden Formula
    :scale: 100%
    :target: https://github.com/pre-commit/pre-commit
 
-Manage Vaultwarden inofficial Bitwarden server with Salt. This will compile the binary from source and manage the service and configuration.
+Manage Vaultwarden inofficial Bitwarden server with Salt. This formula can compile the binary from source or pull a prebuilt binary\* and manage the service and configuration.
 
 Installing and configuring a `reverse proxy <https://github.com/dani-garcia/vaultwarden/wiki/Proxy-examples>`_, `fail2ban <https://github.com/dani-garcia/vaultwarden/wiki/Fail2Ban-Setup>`_ and possibly `log shipping <https://selivan.github.io/2017/02/07/rsyslog-log-forward-save-filename-handle-multi-line-failover.html>`_ (if you run those on another system) are out of scope for this formula. For hints, see `the official docs <https://github.com/dani-garcia/vaultwarden/wiki>`_. I wrote formulae for Rsyslog and Fail2Ban to take care of the latter two. For an example configuration, see :ref:`integration`.
 
-This was written for Debian-based systems primarily, although adapting the formula should be easy.
+This was written for Debian and RHEL OS families primarily, although adapting the formula should be relatively easy.
 
 Mind that the tests are currently just for show and have not been implemented.
+
+\* *There is no official one.*
 
 .. contents:: **Table of Contents**
    :depth: 1
@@ -47,9 +49,9 @@ If you need (non-default) configuration, please refer to:
 
 Special notes
 -------------
-* This compiles from source. You can specify any valid git rev as ``version``, or keep ``latest``. The latter will result in a query to Github releases.
-* Since this formula compiles from source, a functional Rust toolchain is needed on the system. This can either be provided beforehand, by a separate formula or with the inbuilt state. Set ``rust_setup: false`` to disable any action, to the ID of an sls file to include + require it or to ``true`` to enable the inbuilt mechanism.
-* The web vault is downloaded from the patched official release. Set the web vault version to ``false`` to disable installation.
+* This can compile from source. You can specify any valid git rev as ``version``, or keep ``latest``. The latter will result in a query to Github releases.
+* For compilation, a functional Rust toolchain is required on the system. This can either be provided beforehand, by a separate formula or with the inbuilt state. Set ``rust_setup: false`` to disable any action, to the ID of an sls file to include + require it or to ``true`` to enable the inbuilt mechanism.
+* The Web Vault is downloaded from the patched official release (including verifying the signature). Set the web vault version to ``false`` to disable installation.
 * You can modify the paths found in ``lookup:paths``. If they are different than default, ``post-map.jinja`` will automatically adjust the configuration, so you can focus on the rest.
 
 Configuration
