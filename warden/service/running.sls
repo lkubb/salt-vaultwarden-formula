@@ -14,6 +14,7 @@ Vaultwarden is running:
     - enable: true
     - watch:
       - sls: {{ sls_config_file }}
+      - Vaultwarden binary is installed
 
 {%- if warden.manage_firewall and grains["os_family"] == "RedHat" %}
 
