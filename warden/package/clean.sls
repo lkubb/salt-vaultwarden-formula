@@ -38,10 +38,10 @@ Vaultwarden is absent:
 
 Vaultwarden user/group are absent:
   user.absent:
-    - name: {{ warden.lookup.user }}
+    - name: {{ warden.lookup.user.name }}
     - require:
       - Vaultwarden is absent
   group.absent:
-    - name: {{ warden.lookup.group }}
+    - name: {{ warden.lookup.user.group }}
     - require:
       - Vaultwarden is absent

@@ -7,11 +7,13 @@
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- set sls_config_clean = tplroot ~ ".config.clean" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
-{%- set home = salt["user.info"](warden.lookup.user).home %}
+{%- set user_info = salt["user.info"](warden.lookup.user.name) %}
+{%- if user_info %}
 
-Rust toolchain is removed for user '{{ warden.lookup.user }}':
+Rust toolchain is removed for user '{{ warden.lookup.user.name }}':
   cmd.run:
     - name: rustup self uninstall -y
-    - runas: {{ warden.lookup.user }}
+    - runas: {{ warden.lookup.user.name }}
     - onlyif:
-      - test -d '{{ home | path_join(".rustup") }}'
+      - test -d '{{ user_info.home | path_join(".rustup") }}'
+{%- endif %}

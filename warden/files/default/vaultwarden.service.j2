@@ -41,8 +41,8 @@ LimitNPROC=64
 # Directory creation and permissions
 ####################################
 
-User={{ warden.lookup.user }}
-Group={{ warden.lookup.group }}
+User={{ warden.lookup.user.name }}
+Group={{ warden.lookup.user.group }}
 
 {%- if '/var/lib/vaultwarden' == warden.lookup.paths.data %}
 

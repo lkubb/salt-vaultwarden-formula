@@ -10,15 +10,15 @@ Rustup-init is available:
     - source: {{ warden.lookup.rustup_init.source }}
     - source_hash: {{ warden.lookup.rustup_init.source_hash }}
     - unless:
-      - sudo -iu '{{ warden.lookup.user }}' command -v rustup
+      - sudo -iu '{{ warden.lookup.user.name }}' command -v rustup
     - require:
       - Vaultwarden user/group are present
 
-Rustup is installed for user '{{ warden.lookup.user }}':
+Rustup is installed for user '{{ warden.lookup.user.name }}':
   cmd.script:
     - name: {{ rustup_init }}
     - args: -y
-    - runas: {{ warden.lookup.user }}
+    - runas: {{ warden.lookup.user.name }}
     - require:
       - Rustup-init is available
     - prereq:
@@ -38,13 +38,13 @@ Rustup is installed for user '{{ warden.lookup.user }}':
 # to avoid pulling stable first. This will install nightly automatically.
 # Once there is a release that builds with stable, change that @FIXME.
 
-Rust toolchain defaults to nightly for user '{{ warden.lookup.user }}':
+Rust toolchain defaults to nightly for user '{{ warden.lookup.user.name }}':
   cmd.run:
     - name: rustup default nightly
-    - runas: {{ warden.lookup.user }}
+    - runas: {{ warden.lookup.user.name }}
     # no unless since on the first installation, this will pull stable
     - require:
-      - Rustup is installed for user '{{ warden.lookup.user }}'
+      - Rustup is installed for user '{{ warden.lookup.user.name }}'
 
 Rustup-init is absent:
   file.absent:

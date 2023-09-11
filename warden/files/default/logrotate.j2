@@ -1,6 +1,6 @@
 {{ warden.lookup.paths.log | path_join('*.log') }} {
     # Perform logrotation as the bitwarden user and group
-    su {{ warden.lookup.user }} {{ warden.lookup.group }}
+    su {{ warden.lookup.user.name }} {{ warden.lookup.user.group }}
     # Rotate daily
     daily
     # Rotate when the size is bigger than 5MB

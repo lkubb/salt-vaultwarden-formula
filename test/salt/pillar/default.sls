@@ -12,7 +12,6 @@ warden:
         - B9B7A108373276BF3C0406F9FC8A7D14C3CD543A
         - 3C5BBC173D81186CFFDE72A958C80A2AA6C765E1
       server: pgp.mit.edu
-    group: vaultwarden
     paths:
       attachments: attachments
       bin: /opt/vaultwarden
@@ -53,7 +52,11 @@ warden:
     service:
       name: vaultwarden
       unit: /etc/systemd/system/{name}.service
-    user: vaultwarden
+    user:
+      gid: 4477
+      group: vaultwarden
+      name: vaultwarden
+      uid: 4477
     web_vault:
       latest: https://github.com/dani-garcia/bw_web_builds/releases/latest/
       sig: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz.asc

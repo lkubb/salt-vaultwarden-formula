@@ -107,8 +107,8 @@ Vaultwarden web vault is extracted:
   archive.extracted:
     - name: {{ warden.lookup.paths.web_vault }}
     - source: /tmp/web-vault-{{ warden.version_web_vault }}.tar.gz
-    - user: {{ warden.lookup.user }}
-    - group: {{ warden.lookup.group }}
+    - user: {{ warden.lookup.user.name }}
+    - group: {{ warden.lookup.user.group }}
     - force: true
     # just dump the files
     - options: --strip-components=1

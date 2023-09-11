@@ -17,18 +17,19 @@ include:
 
 Vaultwarden user/group are present:
   user.present:
-    - name: {{ warden.lookup.user }}
-    - home: {{ warden.lookup.paths.home }}
+    - name: {{ warden.lookup.user.name }}
+    - home: {{ warden.lookup.paths.home if (not warden.install.source and warden.rust_setup) else warden.lookup.paths.data }}
+    - uid: {{ warden.lookup.user.uid }}
     - createhome: true
     - fullname: Vaultwarden Server
     - system: true
-    - usergroup: {{ warden.lookup.group == warden.lookup.user }}
-{%- if warden.lookup.group != warden.lookup.user %}
-    - gid: {{ warden.lookup.group }}
+    - usergroup: {{ warden.lookup.user.group == warden.lookup.user.name }}
+{%- if warden.lookup.user.group != warden.lookup.user.name %}
+    - gid: {{ warden.lookup.user.group }}
     - require:
-      - group: {{ warden.lookup.group }}
+      - group: {{ warden.lookup.user.group }}
   group.present:
-    - name: {{ warden.lookup.group }}
+    - name: {{ warden.lookup.user.group }}
     - system: true
 {%- endif %}
 
@@ -42,8 +43,8 @@ Vaultwarden user paths are setup:
         - user: root
         - group: {{ warden.lookup.rootgroup }}
         - mode: '0700'
-    - user: {{ warden.lookup.user }}
-    - group: {{ warden.lookup.group }}
+    - user: {{ warden.lookup.user.name }}
+    - group: {{ warden.lookup.user.group }}
     - mode: '0710'
     - makedirs: true
     - require:
@@ -65,7 +66,7 @@ Vaultwarden repository is up to date:
     - target: {{ warden.lookup.paths.build }}
     - rev: {{ warden.version }}
     - force_reset: true
-    - user: {{ warden.lookup.user }}
+    - user: {{ warden.lookup.user.name }}
     - require:
       - Vaultwarden user paths are setup
 
@@ -82,7 +83,7 @@ Vaultwarden is compiled from source:
   cmd.run:
     - name: cargo build --features {{ warden.features | join(",") }} --release
     - cwd: {{ warden.lookup.paths.build }}
-    - runas: {{ warden.lookup.user }}
+    - runas: {{ warden.lookup.user.name }}
     - require:
       - Requirements for compiling vaultwarden are installed
     - onchanges:
@@ -93,8 +94,8 @@ Vaultwarden binary is installed:
   file.copy:
     - name: {{ warden.lookup.paths.bin | path_join("vaultwarden") }}
     - source: {{ warden.lookup.paths.build | path_join("target", "release", "vaultwarden") }}
-    - user: {{ warden.lookup.user }}
-    - group: {{ warden.lookup.group }}
+    - user: {{ warden.lookup.user.name }}
+    - group: {{ warden.lookup.user.group }}
     - force: true
     - onchanges:
       - Vaultwarden is compiled from source
@@ -117,8 +118,8 @@ Vaultwarden binary is installed:
 {%-     endif %}
     - {{ param }}: {{ val.format(version=warden.version) if val is string else val | json }}
 {%-   endfor %}
-    - user: {{ warden.lookup.user }}
-    - group: {{ warden.lookup.group }}
+    - user: {{ warden.lookup.user.name }}
+    - group: {{ warden.lookup.user.group }}
     - mode: '0755'
 {%- endif %}
 
