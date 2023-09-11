@@ -16,6 +16,10 @@ include:
 {%- endif %}
 
 Vaultwarden user/group are present:
+  group.present:
+    - name: {{ warden.lookup.user.group }}
+    - gid: {{ warden.lookup.user.gid }}
+    - system: true
   user.present:
     - name: {{ warden.lookup.user.name }}
     - home: {{ warden.lookup.paths.home if (not warden.install.source and warden.rust_setup) else warden.lookup.paths.data }}
@@ -24,14 +28,9 @@ Vaultwarden user/group are present:
     - fullname: Vaultwarden Server
     - system: true
     - usergroup: {{ warden.lookup.user.group == warden.lookup.user.name }}
-{%- if warden.lookup.user.group != warden.lookup.user.name %}
     - gid: {{ warden.lookup.user.group }}
     - require:
       - group: {{ warden.lookup.user.group }}
-  group.present:
-    - name: {{ warden.lookup.user.group }}
-    - system: true
-{%- endif %}
 
 Vaultwarden user paths are setup:
   file.directory:
