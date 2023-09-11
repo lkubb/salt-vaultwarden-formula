@@ -1,4 +1,3 @@
-{#- -*- coding: utf-8 -*- #}
 {#- vim: ft=jinja #}
 
 {#-
@@ -10,16 +9,15 @@
     Not using "...".format() because the url_effective would interfere.
 -#}
 
-{%- for component in [
-      ('version', mapdata.lookup.pkg.latest),
-      ('version_web_vault', mapdata.lookup.web_vault.latest),
+{%- for version, query in [
+      ("version", mapdata.lookup.pkg.latest),
+      ("version_web_vault", mapdata.lookup.web_vault.latest),
     ]
 -%}
-  {%- set version, query = component -%}
-  {%- if 'latest' == mapdata[version] -%}
+  {%- if "latest" == mapdata[version] -%}
     {#- make sure curl is available to parse the final URL -#}
-    {%- if 'curl' | which -%}
-      {%- set latest = salt['cmd.run_stdout'](
+    {%- if "curl" | which -%}
+      {%- set latest = salt["cmd.run_stdout"](
             "curl -ILs -o /dev/null -w %{url_effective} '" ~ query ~
             "' | grep -o '[^/]*$' | sed 's/v//'",
             python_shell=true
@@ -28,8 +26,8 @@
     {#- Otherwise, do some shell stuff to hopefully find (only) the version.
         OPTIONS query failed with 404 and there is no way to get the final URL from Salt afaict. -#}
     {%- else -%}
-      {%- set whole_page = salt['http.query'](query) -%}
-      {%- set latest = salt['cmd.run_stdout'](
+      {%- set whole_page = salt["http.query"](query) -%}
+      {%- set latest = salt["cmd.run_stdout"](
             "grep -oE '<h1 [^>]+>v?[0-9\.]+' | cut -d'>' -f2 | sed 's/v//'",
             stdin=whole_page.body,
             python_shell=true
@@ -51,7 +49,7 @@
   {%- do deps.extend(mapdata.lookup.requirements.get(feat, [])) -%}
 {%- endfor -%}
 {%- do deps.extend(mapdata.lookup.requirements.base) -%}
-{%- do mapdata.update({'_deps': deps | unique}) -%}
+{%- do mapdata.update({"_deps": deps | unique}) -%}
 
 
 {#-
@@ -59,8 +57,8 @@
     or absolute.
 -#}
 
-{%- for scope in ['attachments', 'icon_cache', 'rsa_keyfile', 'sends'] -%}
-  {%- if '/' != mapdata.lookup.paths[scope][0] -%}
+{%- for scope in ["attachments", "icon_cache", "rsa_keyfile", "sends"] -%}
+  {%- if "/" != mapdata.lookup.paths[scope][0] -%}
     {%- do mapdata.lookup.paths.update({scope: mapdata.lookup.paths.data | path_join(mapdata.lookup.paths[scope])}) -%}
   {%- endif -%}
 {%- endfor -%}
@@ -73,8 +71,8 @@
 -#}
 
 {%- do mapdata.config.update({
-    'log_file': mapdata.lookup.paths.log | path_join('vaultwarden.log'),
-    'web_vault_folder': mapdata.lookup.paths.web_vault,
+    "log_file": mapdata.lookup.paths.log | path_join("vaultwarden.log"),
+    "web_vault_folder": mapdata.lookup.paths.web_vault,
     })
 -%}
 
@@ -83,20 +81,23 @@
     Also, make sure the service will have necessary access rights.
 -#}
 
-{%- do mapdata.update({'_rw': {}}) -%}
-{%- for path in [
-      ('data_folder', mapdata.lookup.paths.data, mapdata.lookup.paths.bin | path_join('data')),
-      ('attachments_folder', mapdata.lookup.paths.attachments, mapdata.lookup.paths.data | path_join('attachments')),
-      ('icon_cache_folder', mapdata.lookup.paths.icon_cache, mapdata.lookup.paths.data | path_join('icon_cache')),
-      ('sends_folder', mapdata.lookup.paths.sends, mapdata.lookup.paths.data | path_join('sends')),
-      ('rsa_key_filename', mapdata.lookup.paths.rsa_keyfile, mapdata.lookup.paths.data | path_join('rsa_key')),
+{%- do mapdata.update({"_rw": []}) -%}
+{%- for var, current, default in [
+      ("data_folder", mapdata.lookup.paths.data, mapdata.lookup.paths.bin | path_join("data")),
+      ("attachments_folder", mapdata.lookup.paths.attachments, mapdata.lookup.paths.data | path_join("attachments")),
+      ("icon_cache_folder", mapdata.lookup.paths.icon_cache, mapdata.lookup.paths.data | path_join("icon_cache")),
+      ("sends_folder", mapdata.lookup.paths.sends, mapdata.lookup.paths.data | path_join("sends")),
+      ("rsa_key_filename", mapdata.lookup.paths.rsa_keyfile, mapdata.lookup.paths.data | path_join("rsa_key")),
     ] -%}
-  {%- set var, current, default = path -%}
   {%- if current != default -%}
     {%- do mapdata.config.update({var: current}) -%}
-    {%- if var not in ['data_folder', 'web_vault_folder'] -%}
-      {#- web vault can be read-only, data/logs is ensured in the service template -#}
-      {%- do mapdata._rw.append(current) -%}
+    {%- if var not in ["data_folder", "web_vault_folder"] -%}
+      {%- if var == "rsa_key_filename" -%}
+        {%- do mapdata._rw.extend([current ~ ".pem", current ~ ".pub.pem"]) -%}
+      {%- else %}
+        {#- web vault can be read-only, data/logs is ensured in the service template -#}
+        {%- do mapdata._rw.append(current) -%}
+      {%- endif %}
     {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
