@@ -1,5 +1,11 @@
 {%- macro render_opt(name, val) %}
-{%-   if val is boolean %}
+{%-   if name | lower == "rocket_tls" %}
+{%-     set rendered = [] %}
+{%-     for rocket_opt, rocket_val in val | dictsort %}
+{%-       do rendered.append(rocket_opt ~ "=" ~ '"' ~ rocket_val ~ '"') %}
+{%-     endfor %}
+{%-     set rendered = "{" ~ (rendered | join(",")) ~ "}" %}
+{%-   elif val is boolean %}
 {%-     set rendered = val | string | lower %}
 {%-   elif val | is_list %}
 {%-     set rendered = val | join(',') %}

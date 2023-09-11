@@ -14,6 +14,7 @@
 include:
   - .package
   - .config
+  - .cert
 {%- if warden.version_web_vault %}
   - .web_vault
 {%- endif %}

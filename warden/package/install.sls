@@ -41,8 +41,8 @@ Vaultwarden user paths are setup:
 {%- endfor %}
       - {{ warden.lookup.paths.conf }}:
         - user: root
-        - group: {{ warden.lookup.rootgroup }}
-        - mode: '0700'
+        - group: {{ warden.lookup.user.group }}
+        - mode: '0750'
     - user: {{ warden.lookup.user.name }}
     - group: {{ warden.lookup.user.group }}
     - mode: '0710'

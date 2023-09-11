@@ -101,3 +101,21 @@
     {%- endif -%}
   {%- endif -%}
 {%- endfor -%}
+
+{#-
+    Make certificate paths absolute and include them in the config, if requested.
+-#}
+
+{%- if mapdata.cert.generate %}
+{%-   set confdir = salt["file.dirname"](mapdata.lookup.config) %}
+{%-   for typ, val in mapdata.lookup.cert.items() %}
+{%-     if not val.startswith("/") %}
+{%-       do mapdata.lookup.cert.update({typ: confdir | path_join(val)}) %}
+{%-     endif %}
+{%-   endfor %}
+{%-   do mapdata | update_dict_key_value("config:rocket_tls", {
+        "certs": mapdata.lookup.cert.cert,
+        "key": mapdata.lookup.cert.privkey,
+      })
+%}
+{%- endif %}

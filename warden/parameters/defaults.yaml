@@ -6,6 +6,10 @@ values:
   lookup:
     rootgroup: root
     config: '/etc/vaultwarden/vaultwarden.conf'
+    cert:
+      ca_cert: tls/ca_cert.pem
+      cert: tls/cert.pem
+      privkey: tls/cert.key
     gpg:
       keys:
         - B9B7A108373276BF3C0406F9FC8A7D14C3CD543A
@@ -60,6 +64,17 @@ values:
       latest: https://github.com/dani-garcia/bw_web_builds/releases/latest/
       sig: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz.asc  # yamllint disable-line rule:line-length
       source: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz  # yamllint disable-line rule:line-length
+  cert:
+    ca_server: null
+    cn: null
+    days_remaining: 7
+    days_valid: 30
+    generate: false
+    intermediate: []
+    san: null
+    signing_cert: null
+    signing_policy: null
+    signing_private_key: null
   config: {}
   features:
     - mysql

@@ -66,6 +66,21 @@ warden:
     templates_folder: /path/to/templates
     web_vault_enabled: true
 
+    # This formula can automatically generate certificates to use
+    # for Rocket TLS. The corresponding configuration options are
+    # set automatically.
+  cert:
+    ca_server: null
+    cn: null
+    days_remaining: 7
+    days_valid: 30
+    generate: false
+    intermediate: []
+    san: null
+    signing_cert: null
+    signing_policy: null
+    signing_private_key: null
+
     # These are mostly internal parameters that you should not have to
     # modify too often.
     # If you change the paths, the bitwarden config will be adapted automatically.
@@ -77,6 +92,10 @@ warden:
     #   will fail. (https://github.com/dani-garcia/vaultwarden/pull/2276)
     # The env var for that is "TMP_FOLDER". @TODO
   lookup:
+    cert:
+      ca_cert: tls/ca_cert.pem
+      cert: tls/cert.pem
+      privkey: tls/cert.key
     gpg:
       keys:
         - B9B7A108373276BF3C0406F9FC8A7D14C3CD543A

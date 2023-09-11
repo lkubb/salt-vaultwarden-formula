@@ -18,5 +18,6 @@ include:
 {%- if warden.version_web_vault %}
   - .web_vault.clean
 {%- endif %}
+  - .cert.clean
   - .config.clean
   - .package.clean

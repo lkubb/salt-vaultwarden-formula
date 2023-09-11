@@ -26,6 +26,11 @@
       "subcomponent_config": "",
       "git_username": "lkubb",
       "lookup": {
+        "cert": {
+          "privkey": "tls/cert.key",
+          "cert": "tls/cert.pem",
+          "ca_cert": "tls/ca_cert.pem"
+        },
         "gpg": {
           "keys": [
             "B9B7A108373276BF3C0406F9FC8A7D14C3CD543A",
@@ -127,6 +132,18 @@
           "templates_folder": "/path/to/templates",
           "web_vault_enabled": true,
           "disable_icon_download": false
+        },
+        "cert": {
+          "generate": false,
+          "ca_server": null,
+          "cn": null,
+          "san": null,
+          "intermediate": [],
+          "signing_policy": null,
+          "signing_private_key": null,
+          "signing_cert": null,
+          "days_remaining": 7,
+          "days_valid": 30
         }
       },
       "_template": "https://github.com/lkubb/salt-template-formula"

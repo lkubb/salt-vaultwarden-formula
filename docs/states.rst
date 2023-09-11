@@ -27,6 +27,12 @@ Manages the warden service configuration.
 Has a dependency on `warden.package`_.
 
 
+``warden.cert``
+^^^^^^^^^^^^^^^
+Generates a TLS certificate + key for Vaultwarden.
+Depends on `warden.package`_.
+
+
 ``warden.web_vault``
 ^^^^^^^^^^^^^^^^^^^^
 Installs the web vault from Github releases (by default).
@@ -70,6 +76,12 @@ Has a dependency on `warden.config.clean`_.
 ^^^^^^^^^^^^^^^^^^^^^^^
 Removes the configuration of the warden service and has a
 dependency on `warden.service.clean`_.
+
+
+``warden.cert.clean``
+^^^^^^^^^^^^^^^^^^^^^
+Removes generated Vaultwarden TLS certificate + key.
+Depends on `warden.service.clean`_.
 
 
 ``warden.web_vault.clean``
