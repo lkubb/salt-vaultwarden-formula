@@ -56,6 +56,11 @@ warden:
     service:
       name: vaultwarden
       unit: /etc/systemd/system/{name}.service
+    shared_libs:
+      mysql:
+        - libmariadb3
+      postgresql:
+        - libpq5
     user:
       gid: 4477
       group: vaultwarden

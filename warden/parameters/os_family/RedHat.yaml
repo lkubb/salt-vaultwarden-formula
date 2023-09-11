@@ -49,4 +49,9 @@ values:
         - libpq-devel
       sqlite:
         - sqlite-devel
+    shared_libs:
+      mysql:
+        - mariadb-connector-c
+      postgresql:
+        - libpq
 ...

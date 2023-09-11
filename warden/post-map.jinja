@@ -46,7 +46,7 @@
 
 {%- set deps = [] -%}
 {%- for feat in mapdata.features -%}
-  {%- do deps.extend(mapdata.lookup.requirements.get(feat, [])) -%}
+  {%- do deps.extend(mapdata.lookup.requirements.get(feat, []) if not mapdata.install.source else mapdata.lookup.shared_libs.get(feat, [])) -%}
 {%- endfor -%}
 {%- do deps.extend(mapdata.lookup.requirements.base) -%}
 {%- do mapdata.update({"_deps": deps | unique}) -%}

@@ -49,15 +49,15 @@ Vaultwarden user paths are setup:
     - require:
       - Vaultwarden user/group are present
 
-{%- if not warden.install.source %}
-
-Requirements for compiling vaultwarden are installed:
+Requirements for compiling/running vaultwarden are installed:
   pkg.installed:
     - pkgs: {{ warden._deps }}
-{%-   if sls_require_rust %}
+{%- if sls_require_rust %}
     - require:
       - sls: {{ sls_require_rust }}
-{%-   endif %}
+{%- endif %}
+
+{%- if not warden.install.source %}
 
 Vaultwarden repository is up to date:
   git.latest:
@@ -84,7 +84,7 @@ Vaultwarden is compiled from source:
     - cwd: {{ warden.lookup.paths.build }}
     - runas: {{ warden.lookup.user.name }}
     - require:
-      - Requirements for compiling vaultwarden are installed
+      - Requirements for compiling/running vaultwarden are installed
     - onchanges:
       - Vaultwarden repository is up to date
       - Trigger build unless version matches

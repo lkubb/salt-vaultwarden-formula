@@ -89,6 +89,10 @@
           "source": "https://sh.rustup.rs",
           "source_hash": "41262c98ae4effc2a752340608542d9fe411da73aca5fbe947fe45f61b7bd5cf"
         },
+        "shared_libs": {
+          "mysql": ["libmariadb3"],
+          "postgresql": ["libpq5"]
+        },
         "user": {
           "name": "vaultwarden",
           "group": "vaultwarden",
