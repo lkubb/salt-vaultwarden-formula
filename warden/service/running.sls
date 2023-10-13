@@ -2,11 +2,14 @@
 
 {%- set tplroot = tpldir.split("/")[0] %}
 {%- set sls_config_file = tplroot ~ ".config.file" %}
+{%- set sls_cert_managed = tplroot ~ ".cert.managed" %}
 {%- from tplroot ~ "/map.jinja" import mapdata as warden with context %}
 
 include:
   - {{ sls_config_file }}
-
+{%- if warden.cert.generate %}
+  - {{ sls_cert_managed }}
+{%- endif %}
 
 Vaultwarden is running:
   service.running:
@@ -15,6 +18,9 @@ Vaultwarden is running:
     - watch:
       - sls: {{ sls_config_file }}
       - Vaultwarden binary is installed
+{%- if warden.cert.generate %}
+      - sls: {{ sls_cert_managed }}
+{%- endif %}
 
 {%- if warden.manage_firewall and grains["os_family"] == "RedHat" %}
 
