@@ -22,14 +22,13 @@ Vaultwarden is running:
       - sls: {{ sls_cert_managed }}
 {%- endif %}
 
-{%- if warden.manage_firewall and grains["os_family"] == "RedHat" %}
+{%- if warden.manage_firewall and "firewall-cmd" | which %}
 
 Vaultwarden service is known:
   firewalld.service:
     - name: vaultwarden
     - ports:
       - {{ warden | traverse("config:rocket_port", "8000") }}/tcp
-      - {{ warden | traverse("config:websocket_port", "3012") }}/tcp
     - require:
       - Vaultwarden is running
 
