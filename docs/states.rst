@@ -30,7 +30,7 @@ Has a dependency on `warden.package`_.
 ``warden.cert``
 ^^^^^^^^^^^^^^^
 Generates a TLS certificate + key for Vaultwarden.
-Depends on `warden.package`_.
+Depends on `warden.config`_.
 
 
 ``warden.web_vault``
