@@ -68,8 +68,9 @@ warden:
       uid: 4477
     web_vault:
       latest: https://github.com/dani-garcia/bw_web_builds/releases/latest/
-      sig: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz.asc
-      source: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz
+      sig: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz.asc  # yamllint disable-line rule:line-length
+      source: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz  # yamllint disable-line rule:line-length
+      source_hash: https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/sha256sums.txt  # yamllint disable-line rule:line-length
   cert:
     ca_server: null
     cn: null

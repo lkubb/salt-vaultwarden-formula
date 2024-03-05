@@ -106,6 +106,7 @@
         "web_vault": {
           "latest": "https://github.com/dani-garcia/bw_web_builds/releases/latest/",
           "source": "https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz",
+          "source_hash": "https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/sha256sums.txt",
           "sig": "https://github.com/dani-garcia/bw_web_builds/releases/download/v{version}/bw_web_v{version}.tar.gz.asc"
         }
       },
