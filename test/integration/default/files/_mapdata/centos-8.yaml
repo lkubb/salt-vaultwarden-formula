@@ -17,7 +17,8 @@ values:
       keys:
         - B9B7A108373276BF3C0406F9FC8A7D14C3CD543A
         - 3C5BBC173D81186CFFDE72A958C80A2AA6C765E1
-      server: pgp.mit.edu
+        - 13BB3A34C9E380258CE43D595CB150B31F6426BC
+      server: keyserver.ubuntu.com
     paths:
       attachments: attachments
       bin: /opt/vaultwarden
